@@ -1,15 +1,14 @@
-import java.util.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * Represents a stock in the SafeTrade project
- * 
+ *
  * @author David
  */
-public class Stock
-{
-    public static DecimalFormat money = new DecimalFormat( "0.00" );
+public class Stock {
+    public static DecimalFormat money = new DecimalFormat("0.00");
 
     private String stockSymbol;
     private String companyName;
@@ -19,77 +18,62 @@ public class Stock
 
     // TODO complete class
 
-    
     //
     // The following are for test purposes only
     //
-    
-    protected String getStockSymbol()
-    {
+
+    protected String getStockSymbol() {
         return stockSymbol;
     }
-    
-    protected String getCompanyName()
-    {
+
+    protected String getCompanyName() {
         return companyName;
     }
-    
-    protected double getLoPrice()
-    {
+
+    protected double getLoPrice() {
         return loPrice;
     }
-    
-    protected double getHiPrice()
-    {
+
+    protected double getHiPrice() {
         return hiPrice;
     }
 
-    protected double getLastPrice()
-    {
+    protected double getLastPrice() {
         return lastPrice;
     }
-    
-    protected int getVolume()
-    {
+
+    protected int getVolume() {
         return volume;
     }
 
-    protected PriorityQueue<TradeOrder> getBuyOrders()
-    {
+    protected PriorityQueue<TradeOrder> getBuyOrders() {
         return buyOrders;
     }
-    
-    protected PriorityQueue<TradeOrder> getSellOrders()
-    {
+
+    protected PriorityQueue<TradeOrder> getSellOrders() {
         return sellOrders;
     }
-    
+
     /**
      * <p>
      * A generic toString implementation that uses reflection to print names and
      * values of all fields <em>declared in this class</em>. Note that
      * superclass fields are left out of this implementation.
      * </p>
-     * 
+     *
      * @return a string representation of this Stock.
      */
-    public String toString()
-    {
+    public String toString() {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
         Field[] fields = this.getClass().getDeclaredFields();
 
-        for ( Field field : fields )
-        {
-            try
-            {
-                str += separator + field.getType().getName() + " "
-                    + field.getName() + ":" + field.get( this );
-            }
-            catch ( IllegalAccessException ex )
-            {
-                System.out.println( ex );
+        for (Field field : fields) {
+            try {
+                str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
+            } catch (IllegalAccessException ex) {
+                System.out.println(ex);
             }
 
             separator = ", ";

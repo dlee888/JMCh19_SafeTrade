@@ -6,50 +6,43 @@ import java.util.*;
  * <code>HashMap</code> of stocks, keyed by a stock symbol. It has methods to
  * list a new stock, request a quote for a given stock symbol, and to place a
  * specified trade order.
- * 
+ *
  * @author David
  */
-public class StockExchange
-{
+public class StockExchange {
     private Map<String, Stock> listedStocks;
-    
-    // TODO complete class
 
-    
+    public StockExchange() {
+        listedStocks = new HashMap<String, Stock>();
+    }
+
     //
     // The following are for test purposes only
     //
-    protected Map<String, Stock> getListedStocks()
-    {
+    protected Map<String, Stock> getListedStocks() {
         return listedStocks;
     }
-    
+
     /**
      * <p>
      * A generic toString implementation that uses reflection to print names and
      * values of all fields <em>declared in this class</em>. Note that
      * superclass fields are left out of this implementation.
      * </p>
-     * 
+     *
      * @return a string representation of this StockExchange.
      */
-    public String toString()
-    {
+    public String toString() {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
         Field[] fields = this.getClass().getDeclaredFields();
 
-        for ( Field field : fields )
-        {
-            try
-            {
-                str += separator + field.getType().getName() + " "
-                    + field.getName() + ":" + field.get( this );
-            }
-            catch ( IllegalAccessException ex )
-            {
-                System.out.println( ex );
+        for (Field field : fields) {
+            try {
+                str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
+            } catch (IllegalAccessException ex) {
+                System.out.println(ex);
             }
 
             separator = ", ";
