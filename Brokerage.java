@@ -3,6 +3,8 @@ import java.util.*;
 
 /**
  * Represents a brokerage.
+ * 
+ * @author Julian
  */
 public class Brokerage implements Login
 {

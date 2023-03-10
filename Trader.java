@@ -3,6 +3,8 @@ import java.util.*;
 
 /**
  * Represents a stock trader.
+ * 
+ * @author Yvonne
  */
 public class Trader implements Comparable<Trader>
 {

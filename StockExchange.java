@@ -6,6 +6,8 @@ import java.util.*;
  * <code>HashMap</code> of stocks, keyed by a stock symbol. It has methods to
  * list a new stock, request a quote for a given stock symbol, and to place a
  * specified trade order.
+ * 
+ * @author David
  */
 public class StockExchange
 {

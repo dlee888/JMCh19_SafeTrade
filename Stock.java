@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 
 /**
  * Represents a stock in the SafeTrade project
+ * 
+ * @author David
  */
 public class Stock
 {
