@@ -163,15 +163,11 @@ public class JUSafeTradeTest {
     // TODO your tests here
 
     // Remove block comment below to run JUnit test in console
-    /*
-        public static junit.framework.Test suite()
-        {
-            return new JUnit4TestAdapter( JUSafeTradeTest.class );
-        }
+    public static junit.framework.Test suite() {
+        return new JUnit4TestAdapter(JUSafeTradeTest.class);
+    }
 
-        public static void main( String args[] )
-        {
-            org.junit.runner.JUnitCore.main( "JUSafeTradeTest" );
-        }
-    */
+    public static void main(String args[]) {
+        org.junit.runner.JUnitCore.main("JUSafeTradeTest");
+    }
 }
