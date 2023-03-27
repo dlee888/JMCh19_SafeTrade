@@ -156,7 +156,19 @@ public class JUSafeTradeTest {
 
     // --Test StockExchange
 
-    // TODO your tests here
+    @Test
+    public void stockExchangeConstructor() {
+        StockExchange exchange = new StockExchange();
+        assertNotNull(exchange);
+    }
+
+    @Test
+    public void stockExchangeListStock() {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        System.out.println(exchange);
+    }
 
     // --Test Stock
 

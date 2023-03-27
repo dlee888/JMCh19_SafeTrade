@@ -6,39 +6,31 @@ import java.util.*;
  *
  * @author Julian
  */
-public class Brokerage
-    implements Login
-{
+public class Brokerage implements Login {
     private Map<String, Trader> traders;
-    private Set<Trader>         loggedTraders;
-    private StockExchange       exchange;
+    private Set<Trader> loggedTraders;
+    private StockExchange exchange;
 
     //
     // The following are for test purposes only
     //
-    protected Map<String, Trader> getTraders()
-    {
+    protected Map<String, Trader> getTraders() {
         return traders;
     }
 
-
-    protected Set<Trader> getLoggedTraders()
-    {
+    protected Set<Trader> getLoggedTraders() {
         return loggedTraders;
     }
 
-
-    protected StockExchange getExchange()
-    {
+    protected StockExchange getExchange() {
         return exchange;
     }
-
 
     /**
      * Tries to register a new trader with a given screen name and password. If
      * successful, creates a Trader object for this trader and adds this trader
      * to the map of all traders (using the screen name as the key).
-     * 
+     *
      * @param name
      *            the screen name of the trader
      * @param password
@@ -49,27 +41,22 @@ public class Brokerage
      *         -2 -- invalid password (must be 2-10 chars) <br>
      *         -3 -- the screen name is already taken.
      */
-    public int addUser(String name, String password)
-    {
-        if (name.length() < 4 || name.length() > 10)
-        {
+    public int addUser(String name, String password) {
+        if (name.length() < 4 || name.length() > 10) {
             return -1;
         }
 
-        if (password.length() < 2 || password.length() > 10)
-        {
+        if (password.length() < 2 || password.length() > 10) {
             return -2;
         }
 
-        if (traders.containsKey(name))
-        {
+        if (traders.containsKey(name)) {
             return -3;
         }
         Trader newTrader = new Trader(this, name, password);
         traders.put(name, newTrader);
         return 0;
     }
-
 
     /**
      * Tries to login a trader with a given screen name and password. If no
@@ -87,22 +74,18 @@ public class Brokerage
      *         -2 -- invalid password <br>
      *         -3 -- user is already logged in.
      */
-    public int login(String name, String password)
-    {
-        if (!traders.containsKey(name))
-        {
+    public int login(String name, String password) {
+        if (!traders.containsKey(name)) {
             return -1;
         }
 
         Trader trader = traders.get(name);
 
-        if (trader.getPassword() != password)
-        {
+        if (trader.getPassword() != password) {
             return -2;
         }
 
-        if (loggedTraders.contains(trader))
-        {
+        if (loggedTraders.contains(trader)) {
             return -3;
         }
 
@@ -116,46 +99,39 @@ public class Brokerage
         return 0;
     }
 
-
     /**
      * Removes a specified trader from the set of logged-in traders. The trader
      * may be assumed to logged in already.
-     * 
+     *
      * @param trader
      *            the trader that logs out.
      */
-    public void logout(Trader trader)
-    {
+    public void logout(Trader trader) {
         loggedTraders.remove(trader);
     }
-
 
     /**
      * Requests a quote for a given stock from the stock exachange and passes it
      * along to the trader by calling trader's receiveMessage method.
-     * 
+     *
      * @param symbol
      *            the stock symbol.
      * @param trader
      *            the trader who requested a quote.
      */
-    public void getQuote(String symbol, Trader trader)
-    {
+    public void getQuote(String symbol, Trader trader) {
         trader.receiveMessage(exchange.getQuote(symbol));
     }
 
-
     /**
      * Places an order at the stock exchange.
-     * 
+     *
      * @param order
      *            an order to be placed at the stock exchange.
      */
-    public void placeOrder(TradeOrder order)
-    {
+    public void placeOrder(TradeOrder order) {
         exchange.placeOrder(order);
     }
-
 
     /**
      * <p>
@@ -166,22 +142,16 @@ public class Brokerage
      *
      * @return a string representation of this Brokerage.
      */
-    public String toString()
-    {
+    public String toString() {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
         Field[] fields = this.getClass().getDeclaredFields();
 
-        for (Field field : fields)
-        {
-            try
-            {
-                str += separator + field.getType().getName() + " " + field.getName() + ":"
-                    + field.get(this);
-            }
-            catch (IllegalAccessException ex)
-            {
+        for (Field field : fields) {
+            try {
+                str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
+            } catch (IllegalAccessException ex) {
                 System.out.println(ex);
             }
 

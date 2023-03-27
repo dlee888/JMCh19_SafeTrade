@@ -92,4 +92,11 @@ public class StockExchange {
 
         return str + "]";
     }
+
+    public static void main(String[] args) {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        System.out.println(exchange);
+    }
 }
