@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.beans.Transient;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -7,6 +8,7 @@ import java.util.Set;
 import java.util.regex.*;
 import junit.framework.JUnit4TestAdapter;
 import org.junit.*;
+
 
 /**
  * SafeTrade tests:
@@ -27,7 +29,12 @@ import org.junit.*;
  *
  */
 public class JUSafeTradeTest {
-    // --Test TradeOrder
+    //
+    // ----------------------------------------------------
+    // TradeOrder Tests
+    // ----------------------------------------------------
+    //
+
     /**
      * TradeOrder tests:
      *   TradeOrderConstructor - constructs TradeOrder and then compare toString
@@ -128,7 +135,12 @@ public class JUSafeTradeTest {
                      numShares - numToSubtract, to.getShares());
     }
 
-    // --Test TraderWindow Stub
+    //
+    // ----------------------------------------------------
+    // TraderWindow Tests
+    // ----------------------------------------------------
+    //
+
     @Test
     public void traderWindowConstructor() {
         TraderWindow tw = new TraderWindow(null);
@@ -142,25 +154,80 @@ public class JUSafeTradeTest {
         tw.showMessage(null);
     }
 
-    //  --Test PriceComparator
+    //
+    // ----------------------------------------------------
+    // PriceComparator Tests
+    // ----------------------------------------------------
+    //
 
     // TODO your tests here
 
-    // --Test Trader
-
-    // TODO your tests here
-
-    // --Test Brokerage
-
-    // TODO your tests here
-
-    // --Test StockExchange
+    //
+    // ----------------------------------------------------
+    // Brokerage Tests
+    // ----------------------------------------------------
+    //
 
     @Test
-    public void stockExchangeConstructor() {
+    public void brokerageConstructor() {
         StockExchange exchange = new StockExchange();
-        assertNotNull(exchange);
+        Brokerage myBrokerage = new Brokerage(exchange);
+        assertNotNull(myBrokerage);
+        assertEquals(myBrokerage.getExchange(), exchange);
+        assertTrue(myBrokerage.getLoggedTraders().isEmpty());
+        assertTrue(myBrokerage.getTraders().isEmpty());
     }
+
+    @Test
+    public void brokerageAddUser() {
+        StockExchange exchange = new StockExchange();
+        Brokerage myBrokerage = new Brokerage(exchange);
+
+        assertEquals(myBrokerage.addUser("LoremIpsum", "E"), -2);
+        assertEquals(myBrokerage.addUser("LoremIpsum", "ExtremeSecurity"), -2);
+        assertEquals(myBrokerage.addUser("LoremIpsum", "Secure"), 0);
+        assertEquals(myBrokerage.addUser("Bob", "Secure"), -1);
+        assertEquals(myBrokerage.addUser("Lorem Ipsum", "Secure"), -1);
+        assertEquals(myBrokerage.addUser("LoremIpsum", "secure"), -3);
+        assertEquals(myBrokerage.addUser("1to2", "12"), 0);
+        assertEquals(myBrokerage.addUser("Jerry", "1234567890"), 0);
+        assertEquals(myBrokerage.getTraders().size(), 3);
+    }
+
+    @Test
+    public void brokerageLogin() {
+        StockExchange exchange = new StockExchange();
+        Brokerage myBrokerage = new Brokerage(exchange);
+
+        myBrokerage.addUser("LoremIpsum", "Secure");
+        myBrokerage.addUser("Jerry", "1234567890");
+
+        assertEquals(myBrokerage.login("fndskl", "hfdgs"), -1);
+        assertEquals(myBrokerage.login("fndskl", "Secure"), -1);
+        assertEquals(myBrokerage.login("LoremIpsum", "hfdgs"), -2);
+        assertEquals(myBrokerage.login("LoremIpsum", "Secure"), 0);
+        assertEquals(myBrokerage.login("Jerry", "1234567890"), 0);
+        assertEquals(myBrokerage.login("LoremIpsum", "Secure"), -3);
+        assertEquals(myBrokerage.login("Jerry", "1234567890"), -3);
+        assertEquals(myBrokerage.getLoggedTraders().size(), 2);
+    }
+
+    @Test
+    public void brokerageLogout() {
+        StockExchange exchange = new StockExchange();
+        Brokerage myBrokerage = new Brokerage(exchange);
+
+        myBrokerage.addUser("LoremIpsum", "Secure");
+        myBrokerage.addUser("Jerry", "1234567890");
+
+        assertEquals(myBrokerage.getLoggedTraders().size(), 2);
+    }
+
+    //
+    // ----------------------------------------------------
+    // StockExchange Tests
+    // ----------------------------------------------------
+    //
 
     @Test
     public void stockExchangeListStock() {
@@ -179,7 +246,7 @@ public class JUSafeTradeTest {
         exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
         String quote1 = exchange.getQuote("ERIC");
         String quote2 = exchange.getQuote("RICE");
-        assertTrue("<< StockExchange: get quote in listing >>", quote1 != null && quote1.contains("ERIC");
+        assertTrue("<< StockExchange: get quote in listing >>", quote1 != null && quote1.contains("ERIC"));
         assertTrue("<< StockExchange: get quote not in listing >>", quote2 != null && quote2.equals("RICE not found"));
     }
 
@@ -195,7 +262,11 @@ public class JUSafeTradeTest {
         assertTrue("<< StockExchange: placeOrder executed successfully", true);
     }
 
-    // --Test Stock
+    //
+    // ----------------------------------------------------
+    // Stock Tests
+    // ----------------------------------------------------
+    //
 
     @Test
     public void stockConstructor() {
@@ -260,9 +331,100 @@ public class JUSafeTradeTest {
         assertEquals(buyOrders.size(), 1);
         assertEquals(sellOrders.size(), 1);
     }
-    // TODO your tests here
+
+    //
+    // ----------------------------------------------------
+    // Trader Tests
+    // ----------------------------------------------------
+    //
+
+    private String screenName = "Trader test";
+    private String password = "123456";
+    private StockExchange stock = new StockExchange();
+    private Brokerage broke = new Brokerage(stock);
+
+    @Test
+    public void traderConstructorTest() {
+        Trader trade = new Trader(broke, screenName, password);
+        String str = trade.toString();
+        assertTrue("<< Constructor for trader error:", str.contains("password") && str.contains(password) &&
+                                                           str.contains("screenName") && str.contains(screenName));
+    }
+
+    @Test
+    public void getNameTraderTest() {
+        Trader trade = new Trader(broke, screenName, password);
+        assertEquals("<< Trader getName error:", trade.getName(), "Trader test");
+    }
+
+    @Test
+    public void getPassTraderTest() {
+        Trader trade = new Trader(broke, screenName, password);
+        assertEquals("<< Trader getPass error:", trade.getPassword(), "123456");
+    }
+
+    public void compareToTraderTest() {
+        Trader trade = new Trader(broke, screenName, password);
+        Trader other = new Trader(null, "Trader test", "123456");
+        assertTrue("<< Trader compareTo error:", trade.compareTo(other) != 0);
+    }
+
+    @Test
+    public void equalsTraderTest() {
+        Trader trade = new Trader(broke, screenName, password);
+        Trader other = new Trader(null, "Trader test", "123456");
+        assertEquals("<< Trader equals error:", trade.equals(other) == false);
+    }
+
+    @Test
+    public void hasMessagesTraderTest() {
+        Trader trade = new Trader(new Brokerage(new StockExchange()), screenName, password);
+        assertTrue("<< Trader has no messages: ", !trade.hasMessages());
+        trade.receiveMessage("hi");
+        assertTrue("<< Trader has messages, should be true:", trade.hasMessages());
+    }
+
+    @Test
+    public void openWindowTraderTest() {
+        Trader trade = new Trader(broke, screenName, password);
+        trade.openWindow();
+        assertTrue("<< Trader has no messages", !trade.hasMessages());
+    }
+
+    @Test
+    public void recieveMessageTraderTest() {
+        Trader trade = new Trader(new Brokerage(new StockExchange()), screenName, password);
+        trade.receiveMessage("hi");
+        assertTrue("<< Trader has messages", trade.hasMessages());
+    }
+
+    @Test
+    public void getQuoteTraderTest() {
+        Trader trade = new Trader(new Brokerage(new StockExchange()), screenName, password);
+        trade.getQuote(symbol);
+        assertTrue("<< Trader getQuote: ", trade.hasMessages());
+        trade.openWindow();
+        trade.getQuote(symbol);
+        assertTrue("<< Trader getQuote: ", !trade.hasMessages());
+    }
+
+    @Test
+    public void placeOrderTraderTest() {
+        Trader trade = new Trader(new Brokerage(new StockExchange()), screenName, password);
+        TradeOrder tradeOrder = new TradeOrder(trade, symbol, buyOrder, marketOrder, numShares, price);
+        assertTrue("<< Trader has messages, should be true: ", trade.hasMessages());
+    }
+
+    @Test
+    public void quitTraderTest() {
+        Brokerage b = new Brokerage(new StockExchange());
+        Trader trade = new Trader(b, screenName, password);
+        trade.quit();
+        assertEquals("<< Trader is logged out: ", b.getLoggedTraders.contains(trade) != true);
+    }
 
     // Remove block comment below to run JUnit test in console
+
     public static junit.framework.Test suite() {
         return new JUnit4TestAdapter(JUSafeTradeTest.class);
     }

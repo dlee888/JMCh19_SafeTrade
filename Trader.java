@@ -11,8 +11,9 @@ public class Trader implements Comparable<Trader> {
     private TraderWindow myWindow;
     private Queue<String> mailbox;
 
-    public Trader(Brokerage brokerage, java.lang.String name, java.lang.String pswd) {
-        brokerage = brokerage;
+    public Trader(Brokerage brokerage, java.lang.String name, java.lang.String pswd)
+    {
+        this.brokerage = brokerage;
         screenName = name;
         password = pswd;
     }
@@ -27,8 +28,9 @@ public class Trader implements Comparable<Trader> {
         return password;
     }
 
-    public void getQuote(String symbol) {
-        getQuote(symbol, this);
+    public void getQuote(String symbol) 
+    {
+        brokerage.getQuote(symbol, this);
     }
 
     public boolean hasMessages() //
@@ -53,16 +55,19 @@ public class Trader implements Comparable<Trader> {
         }
     }
 
-    public void placeOrder(TradeOrder order) {
-        placeOrder(order);
+    public void placeOrder(TradeOrder order)
+    {
+        brokerage.placeOrder(order);
     }
 
-    public void quit() {
-        brokerage.logout();
+    public void quit()
+    {
+        brokerage.logout(this);
         myWindow = null;
     }
 
-    public void recieveMessage(java.lang.String msg) {
+    public void receiveMessage(java.lang.String msg)
+    {
         mailbox.add(msg);
         if (myWindow != null) {
             while (mailbox.peek() != null) {

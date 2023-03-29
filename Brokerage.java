@@ -11,6 +11,12 @@ public class Brokerage implements Login {
     private Set<Trader> loggedTraders;
     private StockExchange exchange;
 
+    public Brokerage(StockExchange exchange) {
+        this.exchange = exchange;
+        loggedTraders = new HashSet<Trader>();
+        traders = new HashMap<String, Trader>();
+    }
+
     //
     // The following are for test purposes only
     //
