@@ -131,10 +131,16 @@ public class Stock {
     public void executeOrders() {
         TradeOrder buyOrder = buyOrders.peek();
         TradeOrder sellOrder = sellOrders.peek();
+        if (buyOrder == null or sellOrder == null) {
+            return;
+        }
         int sharesTraded = Math.min(buyOrder.getShares(), sellOrder.getShares());
         double price = 0;
-        if (buyOrder.isLimit() && sellOrder.isLimit() && buyOrder.getPrice() >= sellOrder.getPrice()) {
+        if (buyOrder.isLimit() && sellOrder.isLimit()) {
             price = sellOrder.getPrice();
+            if (buyOrder.getPrice() > price) {
+                return;
+            }
         } else if (buyOrder.isLimit() && sellOrder.isMarket()) {
             price = buyOrder.getPrice();
         } else if (buyOrder.isMarket() && sellOrder.isLimit()) {
@@ -157,6 +163,7 @@ public class Stock {
                                                           stockSymbol, price, sharesTraded * price));
         sellOrder.getTrader().receiveMessage(
             String.format("You sold: %d %s at %.2f amt %.2f", sharesTraded, stockSymbol, price, sharesTraded * price));
+        executeOrders();
     }
 
     //

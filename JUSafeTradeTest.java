@@ -167,11 +167,99 @@ public class JUSafeTradeTest {
         StockExchange exchange = new StockExchange();
         exchange.listStock("ESPN", "Espen", 137.69);
         exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
-        System.out.println(exchange);
+        Map<String, Stock> map = exchange.getListedStocks();
+        assertTrue("<< StockExchange: listed stock should be in map >>", map.containsKey("ERIC"));
+        assertFalse("<< StockExchange: not listed stock should not be in map >>", map.containsKey("Espen"));
+    }
+
+    @Test
+    public void stockExchangeGetQuote() {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        String quote1 = exchange.getQuote("ERIC");
+        String quote2 = exchange.getQuote("RICE");
+        assertTrue("<< StockExchange: get quote in listing >>", quote1 != null && quote1.contains("ERIC");
+        assertTrue("<< StockExchange: get quote not in listing >>", quote2 != null && quote2.equals("RICE not found"));
+    }
+
+    @Test
+    public void stockExchangePlaceOrder() {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        Brokerage brokerage = new Brokerage(exchange);
+        Trader eric = new Trader(brokerage, "ricehens", "eric69420");
+        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
+        exchange.placeOrder(order);
+        assertTrue("<< StockExchange: placeOrder executed successfully", true);
     }
 
     // --Test Stock
 
+    @Test
+    public void stockConstructor() {
+        Stock stonk = new Stock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        assertNotNull(stonk);
+        assertEquals("<< Stock: Constructor symbol >>", stonk.getStockSymbol(), "ERIC");
+        assertEquals("<< Stock: Constructor company name >>", stonk.getCompanyName(), "Ricehens");
+        assertEquals("<< Stock: Constructor last price >>", stonk.getLastPrice(), 138.69);
+    }
+
+    @Test
+    public void stockPlaceOrder() {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        Brokerage brokerage = new Brokerage(exchange);
+        Trader eric = new Trader(brokerage, "ricehens", "eric69420");
+        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
+        Map<String, Stock> map = exchange.getListedStocks();
+        Stock stonk = map.get("ESPN");
+        stonk.placeOrder(order);
+        PriorityQueue<TradeOrder> buyOrders = stonk.getBuyOrders();
+        PriorityQueue<TradeOrder> sellOrders = stonk.getSellOrders();
+        assertEquals("<< Stock: placed buy order >>", buyOrders.size(), 1);
+        assertEquals("<< Stock: placed buy order >>", sellOrders.size(), 0);
+    }
+
+    @Test
+    public void stockExecuteOrders() {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        Brokerage brokerage = new Brokerage(exchange);
+        Trader eric = new Trader(brokerage, "ricehens", "eric69420");
+        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
+        Map<String, Stock> map = exchange.getListedStocks();
+        Stock stonk = map.get("ESPN");
+        stonk.placeOrder(order);
+        PriorityQueue<TradeOrder> buyOrders = stonk.getBuyOrders();
+        PriorityQueue<TradeOrder> sellOrders = stonk.getSellOrders();
+        buyOrders.add(new TradeOrder(eric, "ESPN", true, true, 69, 4.20));
+        sellOrders.add(new TradeOrder(eric, "ESPN", false, true, 137, 6.96));
+        stonk.executeOrders();
+        assertEquals(buyOrders.size(), 0);
+        assertEquals(sellOrders.size(), 1);
+        assertEquals(sellOrders.peek().getShares(), 68);
+        buyOrders.add(new TradeOrder(eric, "ESPN", true, false, 69, 42.0));
+        sellOrders.add(new TradeOrder(eric, "ESPN", false, true, 69, 6.99));
+        stonk.executeOrders();
+        assertEquals(buyOrders.size(), 0);
+        assertEquals(sellOrders.size(), 1);
+        assertEquals(sellOrders.peek().getShares(), 68);
+        assertEquals(sellOrders.peek().getPrice(), 6.99);
+        buyOrders.add(new TradeOrder(eric, "ESPN", true, false, 69, 42.0));
+        sellOrders.add(new TradeOrder(eric, "ESPN", false, false, 69, 7.69));
+        stonk.executeOrders();
+        assertEquals(buyOrders.size(), 0);
+        assertEquals(sellOrders.size(), 1);
+        assertEquals(sellOrders.peek().getShares(), 68);
+        buyOrders.add(new TradeOrder(eric, "ESPN", true, false, 69, 6.96));
+        stonk.executeOrders();
+        assertEquals(buyOrders.size(), 1);
+        assertEquals(sellOrders.size(), 1);
+    }
     // TODO your tests here
 
     // Remove block comment below to run JUnit test in console
