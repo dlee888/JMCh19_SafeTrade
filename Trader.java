@@ -14,7 +14,7 @@ public class Trader implements Comparable<Trader>
 
     public Trader(Brokerage brokerage, java.lang.String name, java.lang.String pswd)
     {
-        brokerage = brokerage;
+        this.brokerage = brokerage;
         screenName = name;
         password = pswd;
     }
@@ -32,7 +32,7 @@ public class Trader implements Comparable<Trader>
 
     public void getQuote(String symbol) 
     {
-        getQuote(symbol, this);
+        brokerage.getQuote(symbol, this);
     }
 
     public boolean hasMessages() //
@@ -61,16 +61,16 @@ public class Trader implements Comparable<Trader>
 
     public void placeOrder(TradeOrder order)
     {
-        placeOrder(order);
+        brokerage.placeOrder(order);
     }
 
     public void quit()
     {
-        brokerage.logout();
+        brokerage.logout(this);
         myWindow = null;
     }
 
-    public void recieveMessage(java.lang.String msg)
+    public void receiveMessage(java.lang.String msg)
     {
         mailbox.add(msg);
         if(myWindow != null)
