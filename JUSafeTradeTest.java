@@ -1,5 +1,5 @@
 import static org.junit.Assert.*;
-
+import java.beans.Transient;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -151,6 +151,61 @@ public class JUSafeTradeTest {
     // TODO your tests here
 
     // --Test Brokerage
+
+    @Test
+    public void brokerageConstructor() {
+        StockExchange exchange = new StockExchange();
+        Brokerage myBrokerage = new Brokerage(exchange);
+        assertNotNull(myBrokerage);
+        assertEquals(myBrokerage.getExchange(), exchange);
+        assertTrue(myBrokerage.getLoggedTraders().isEmpty());
+        assertTrue(myBrokerage.getTraders().isEmpty());
+    }
+
+    @Test
+    public void brokerageAddUser() {
+        StockExchange exchange = new StockExchange();
+        Brokerage myBrokerage = new Brokerage(exchange);
+
+        assertEquals(myBrokerage.addUser("LoremIpsum", "E"), -2);
+        assertEquals(myBrokerage.addUser("LoremIpsum", "ExtremeSecurity"), -2);
+        assertEquals(myBrokerage.addUser("LoremIpsum", "Secure"), 0);
+        assertEquals(myBrokerage.addUser("Bob", "Secure"), -1);
+        assertEquals(myBrokerage.addUser("Lorem Ipsum", "Secure"), -1);
+        assertEquals(myBrokerage.addUser("LoremIpsum", "secure"), -3);
+        assertEquals(myBrokerage.addUser("1to2", "12"), 0);
+        assertEquals(myBrokerage.addUser("Jerry", "1234567890"), 0);
+        assertEquals(myBrokerage.getTraders().size(), 3);
+    }
+
+    @Test
+    public void brokerageLogin() {
+        StockExchange exchange = new StockExchange();
+        Brokerage myBrokerage = new Brokerage(exchange);
+
+        myBrokerage.addUser("LoremIpsum", "Secure");
+        myBrokerage.addUser("Jerry", "1234567890");
+
+        assertEquals(myBrokerage.login("fndskl", "hfdgs"), -1);
+        assertEquals(myBrokerage.login("fndskl", "Secure"), -1);
+        assertEquals(myBrokerage.login("LoremIpsum", "hfdgs"), -2);
+        assertEquals(myBrokerage.login("LoremIpsum", "Secure"), 0);
+        assertEquals(myBrokerage.login("Jerry", "1234567890"), 0);
+        assertEquals(myBrokerage.login("LoremIpsum", "Secure"), -3);
+        assertEquals(myBrokerage.login("Jerry", "1234567890"), -3);
+        assertEquals(myBrokerage.getLoggedTraders().size(), 2);
+    }
+
+    @Test
+    public void brokerageLogout() {
+        StockExchange exchange = new StockExchange();
+        Brokerage myBrokerage = new Brokerage(exchange);
+
+        myBrokerage.addUser("LoremIpsum", "Secure");
+        myBrokerage.addUser("Jerry", "1234567890");
+
+        assertEquals(myBrokerage.getLoggedTraders().size(), 2);
+    }
 
     // TODO your tests here
 
