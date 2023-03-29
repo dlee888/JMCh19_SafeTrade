@@ -5,7 +5,8 @@ import java.lang.reflect.*;
  * specified stock.
  * @author Yvonne
  */
-public class TradeOrder {
+public class TradeOrder
+{
     private Trader trader;
     private String symbol;
     private boolean buyOrder;
@@ -13,31 +14,50 @@ public class TradeOrder {
     private int numShares;
     private double price;
 
-    private Trader getTrader() {
+    public TradeOrder(Trader trader, java.lang.String symbol, boolean buyOrder, boolean marketOrder, int numShares, double price)
+    {
+        this.trader = trader;
+        this.symbol = symbol;
+        this.buyOrder = buyOrder;
+        this.marketOrder = marketOrder;
+        this.numShares = numShares;
+        this.price = price;
+    }
+
+    public Trader getTrader()
+    {
         return trader;
     }
-    private String getSymbol() {
+    public String getSymbol()
+    {
         return symbol;
     }
-    private boolean isBuy() {
+    public boolean isBuy()
+    {
         return buyOrder;
     }
-    private boolean isSell() {
+    public boolean isSell()
+    {
         return !buyOrder;
     }
-    private boolean isMarket() {
+    public boolean isMarket()
+    {
         return marketOrder;
     }
-    private boolean isLimit() {
+    public boolean isLimit()
+    {
         return !marketOrder;
     }
-    private int getShares() {
+    public int getShares()
+    {
         return numShares;
     }
-    private double getPrice() {
+    public double getPrice()
+    {
         return price;
     }
-    private void subtractShares(int shares) {
+    public void subtractShares(int shares)
+    {
         numShares -= shares;
     }
 
@@ -50,20 +70,26 @@ public class TradeOrder {
      * values of all fields <em>declared in this class</em>. Note that
      * superclass fields are left out of this implementation.
      * </p>
-     *
+     * 
      * @return a string representation of this TradeOrder.
      */
-    public String toString() {
+    public String toString()
+    {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
         Field[] fields = this.getClass().getDeclaredFields();
 
-        for (Field field : fields) {
-            try {
-                str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
-            } catch (IllegalAccessException ex) {
-                System.out.println(ex);
+        for ( Field field : fields )
+        {
+            try
+            {
+                str += separator + field.getType().getName() + " "
+                    + field.getName() + ":" + field.get( this );
+            }
+            catch ( IllegalAccessException ex )
+            {
+                System.out.println( ex );
             }
 
             separator = ", ";

@@ -5,86 +5,124 @@ import java.util.*;
  * Represents a stock trader.
  * @author Yvonne
  */
-public class Trader implements Comparable<Trader> {
+public class Trader implements Comparable<Trader>
+{
     private Brokerage brokerage;
     private String screenName, password;
     private TraderWindow myWindow;
     private Queue<String> mailbox;
 
-    public String getName() {
-        return screenName;
+    public Trader(Brokerage brokerage, java.lang.String name, java.lang.String pswd)
+    {
+        brokerage = brokerage;
+        screenName = name;
+        password = pswd;
     }
 
-    public String getPassword() {
+
+    public String getName() //
+    {
+        return screenName;
+    }
+    
+    public String getPassword() //
+    {
         return password;
     }
 
-    public void getQuote(String symbol) {
-        getQuote(symbol);
+    public void getQuote(String symbol) 
+    {
+        getQuote(symbol, this);
     }
 
-    public boolean hasMessages() {
-        return (!mailbox.isEmpty());
+    public boolean hasMessages() //
+    {
+        return(!mailbox.isEmpty());
     }
 
-    public int compareTo(Trader other) {
+    public int compareTo(Trader other) //
+    {
         return (screenName.toLowerCase()).compareTo((other.getName()).toLowerCase());
     }
 
-    public boolean equals(Trader other) {
+    public boolean equals(Trader other) //
+    {
         return (screenName.compareTo(other.getName()) == 0);
     }
 
-    public void openWindow() {
-        myWindow = new TraderWindow(null);
+    public void openWindow()
+    {
+        myWindow = new TraderWindow(this);
+        while(mailbox.peek() != null)
+        {
+            myWindow.showMessage(mailbox.remove());
+        }
     }
 
-    public void placeOrder(TradeOrder order) {
+    public void placeOrder(TradeOrder order)
+    {
         placeOrder(order);
     }
 
-    public void quit() {
-        logout();
+    public void quit()
+    {
+        brokerage.logout();
         myWindow = null;
     }
 
-    public void recieveMessage(java.lang.String msg) {
+    public void recieveMessage(java.lang.String msg)
+    {
         mailbox.add(msg);
-        for (String s : mailbox) {
-            System.out.println(s);
+        if(myWindow != null)
+        {
+            while(mailbox.peek() != null)
+            {
+                myWindow.showMessage(mailbox.remove());
+            }
         }
     }
+
+
+
 
     //
     // The following are for test purposes only
     //
-    protected Queue<String> mailbox() {
+    protected Queue<String> mailbox()
+    {
         return mailbox;
     }
-
+    
     /**
      * <p>
      * A generic toString implementation that uses reflection to print names and
      * values of all fields <em>declared in this class</em>. Note that
      * superclass fields are left out of this implementation.
      * </p>
-     *
+     * 
      * @return a string representation of this Trader.
      */
-    public String toString() {
+    public String toString()
+    {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
         Field[] fields = this.getClass().getDeclaredFields();
 
-        for (Field field : fields) {
-            try {
-                if (field.getType().getName().equals("Brokerage"))
-                    str += separator + field.getType().getName() + " " + field.getName();
+        for ( Field field : fields )
+        {
+            try
+            {
+                if ( field.getType().getName().equals( "Brokerage" ) )
+                    str += separator + field.getType().getName() + " "
+                        + field.getName();
                 else
-                    str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
-            } catch (IllegalAccessException ex) {
-                System.out.println(ex);
+                    str += separator + field.getType().getName() + " "
+                        + field.getName() + ":" + field.get( this );
+            }
+            catch ( IllegalAccessException ex )
+            {
+                System.out.println( ex );
             }
 
             separator = ", ";
