@@ -273,7 +273,7 @@ public class JUSafeTradeTest {
         assertNotNull(stonk);
         assertEquals("<< Stock: Constructor symbol >>", stonk.getStockSymbol(), "ERIC");
         assertEquals("<< Stock: Constructor company name >>", stonk.getCompanyName(), "Ricehens");
-        assertEquals("<< Stock: Constructor last price >>", stonk.getLastPrice(), 138.69);
+        assertEquals("<< Stock: Constructor last price >>", stonk.getLastPrice(), 138.69, 0.00001);
     }
 
     @Test
@@ -318,7 +318,7 @@ public class JUSafeTradeTest {
         assertEquals(buyOrders.size(), 0);
         assertEquals(sellOrders.size(), 1);
         assertEquals(sellOrders.peek().getShares(), 68);
-        assertEquals(sellOrders.peek().getPrice(), 6.99);
+        assertEquals(sellOrders.peek().getPrice(), 6.99, 0.00001);
         buyOrders.add(new TradeOrder(eric, "ESPN", true, false, 69, 42.0));
         sellOrders.add(new TradeOrder(eric, "ESPN", false, false, 69, 7.69));
         stonk.executeOrders();
