@@ -9,7 +9,6 @@ import java.util.regex.*;
 import junit.framework.JUnit4TestAdapter;
 import org.junit.*;
 
-
 /**
  * SafeTrade tests:
  *   TradeOrder
@@ -420,7 +419,7 @@ public class JUSafeTradeTest {
         Brokerage b = new Brokerage(new StockExchange());
         Trader trade = new Trader(b, screenName, password);
         trade.quit();
-        assertEquals("<< Trader is logged out: ", b.getLoggedTraders.contains(trade) != true);
+        assertEquals("<< Trader is logged out: ", b.getLoggedTraders().contains(trade) != true);
     }
 
     // Remove block comment below to run JUnit test in console

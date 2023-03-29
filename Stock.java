@@ -131,7 +131,7 @@ public class Stock {
     public void executeOrders() {
         TradeOrder buyOrder = buyOrders.peek();
         TradeOrder sellOrder = sellOrders.peek();
-        if (buyOrder == null or sellOrder == null) {
+        if (buyOrder == null || sellOrder == null) {
             return;
         }
         int sharesTraded = Math.min(buyOrder.getShares(), sellOrder.getShares());
