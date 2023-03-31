@@ -52,7 +52,7 @@ public class TradeOrder {
 
     /**
      * Returns opposite of buyOrder value
-     * @return 
+     * @return
      *         the opposite of buyOrder
      */
     public boolean isSell() {

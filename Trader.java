@@ -15,7 +15,7 @@ public class Trader implements Comparable<Trader> {
      * This is the trader constructor
      * @param brokerage
      *              This is the brokerage parameter
-     * @param name 
+     * @param name
      *             This is the given name
      * @param pswd
      *          This is the password given
@@ -68,7 +68,7 @@ public class Trader implements Comparable<Trader> {
 
     /**
      * Compare name to eachother but ignore case
-     * @return 
+     * @return
      *         -1 if less than, 0, if equal, 1 if greater than
      */
     public int compareTo(Trader other) //
@@ -87,7 +87,6 @@ public class Trader implements Comparable<Trader> {
     {
         return (screenName.compareToIgnoreCase(other.getName()) == 0);
     }
-
 
     /**
      * Opens the winder
