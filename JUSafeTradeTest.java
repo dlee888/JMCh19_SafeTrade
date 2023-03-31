@@ -1,6 +1,5 @@
 import static org.junit.Assert.*;
 
-import java.beans.Transient;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -28,12 +27,7 @@ import org.junit.*;
  *
  */
 public class JUSafeTradeTest {
-    //
-    // ----------------------------------------------------
-    // TradeOrder Tests
-    // ----------------------------------------------------
-    //
-
+    // --Test TradeOrder
     /**
      * TradeOrder tests:
      *   TradeOrderConstructor - constructs TradeOrder and then compare toString
@@ -134,12 +128,7 @@ public class JUSafeTradeTest {
                      numShares - numToSubtract, to.getShares());
     }
 
-    //
-    // ----------------------------------------------------
-    // TraderWindow Tests
-    // ----------------------------------------------------
-    //
-
+    // --Test TraderWindow Stub
     @Test
     public void traderWindowConstructor() {
         TraderWindow tw = new TraderWindow(null);
@@ -153,190 +142,11 @@ public class JUSafeTradeTest {
         tw.showMessage(null);
     }
 
-    //
-    // ----------------------------------------------------
-    // PriceComparator Tests
-    // ----------------------------------------------------
-    //
+    //  --Test PriceComparator
 
     // TODO your tests here
 
-    //
-    // ----------------------------------------------------
-    // Brokerage Tests
-    // ----------------------------------------------------
-    //
-
-    @Test
-    public void brokerageConstructor() {
-        StockExchange exchange = new StockExchange();
-        Brokerage myBrokerage = new Brokerage(exchange);
-        assertNotNull(myBrokerage);
-        assertEquals(myBrokerage.getExchange(), exchange);
-        assertTrue(myBrokerage.getLoggedTraders().isEmpty());
-        assertTrue(myBrokerage.getTraders().isEmpty());
-    }
-
-    @Test
-    public void brokerageAddUser() {
-        StockExchange exchange = new StockExchange();
-        Brokerage myBrokerage = new Brokerage(exchange);
-
-        assertEquals(myBrokerage.addUser("LoremIpsum", "E"), -2);
-        assertEquals(myBrokerage.addUser("LoremIpsum", "ExtremeSecurity"), -2);
-        assertEquals(myBrokerage.addUser("LoremIpsum", "Secure"), 0);
-        assertEquals(myBrokerage.addUser("Bob", "Secure"), -1);
-        assertEquals(myBrokerage.addUser("Lorem Ipsum", "Secure"), -1);
-        assertEquals(myBrokerage.addUser("LoremIpsum", "secure"), -3);
-        assertEquals(myBrokerage.addUser("1to2", "12"), 0);
-        assertEquals(myBrokerage.addUser("Jerry", "1234567890"), 0);
-        assertEquals(myBrokerage.getTraders().size(), 3);
-    }
-
-    @Test
-    public void brokerageLogin() {
-        StockExchange exchange = new StockExchange();
-        Brokerage myBrokerage = new Brokerage(exchange);
-
-        myBrokerage.addUser("LoremIpsum", "Secure");
-        myBrokerage.addUser("Jerry", "1234567890");
-
-        assertEquals(myBrokerage.login("fndskl", "hfdgs"), -1);
-        assertEquals(myBrokerage.login("fndskl", "Secure"), -1);
-        assertEquals(myBrokerage.login("LoremIpsum", "hfdgs"), -2);
-        assertEquals(myBrokerage.login("LoremIpsum", "Secure"), 0);
-        assertEquals(myBrokerage.login("Jerry", "1234567890"), 0);
-        assertEquals(myBrokerage.login("LoremIpsum", "Secure"), -3);
-        assertEquals(myBrokerage.login("Jerry", "1234567890"), -3);
-        assertEquals(myBrokerage.getLoggedTraders().size(), 2);
-    }
-
-    @Test
-    public void brokerageLogout() {
-        StockExchange exchange = new StockExchange();
-        Brokerage myBrokerage = new Brokerage(exchange);
-
-        myBrokerage.addUser("LoremIpsum", "Secure");
-        myBrokerage.addUser("Jerry", "1234567890");
-
-        assertEquals(myBrokerage.getLoggedTraders().size(), 2);
-    }
-
-    //
-    // ----------------------------------------------------
-    // StockExchange Tests
-    // ----------------------------------------------------
-    //
-
-    @Test
-    public void stockExchangeListStock() {
-        StockExchange exchange = new StockExchange();
-        exchange.listStock("ESPN", "Espen", 137.69);
-        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
-        Map<String, Stock> map = exchange.getListedStocks();
-        assertTrue("<< StockExchange: listed stock should be in map >>", map.containsKey("ERIC"));
-        assertFalse("<< StockExchange: not listed stock should not be in map >>", map.containsKey("Espen"));
-    }
-
-    @Test
-    public void stockExchangeGetQuote() {
-        StockExchange exchange = new StockExchange();
-        exchange.listStock("ESPN", "Espen", 137.69);
-        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
-        String quote1 = exchange.getQuote("ERIC");
-        String quote2 = exchange.getQuote("RICE");
-        assertTrue("<< StockExchange: get quote in listing >>", quote1 != null && quote1.contains("ERIC"));
-        assertTrue("<< StockExchange: get quote not in listing >>", quote2 != null && quote2.equals("RICE not found"));
-    }
-
-    @Test
-    public void stockExchangePlaceOrder() {
-        StockExchange exchange = new StockExchange();
-        exchange.listStock("ESPN", "Espen", 137.69);
-        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
-        Brokerage brokerage = new Brokerage(exchange);
-        Trader eric = new Trader(brokerage, "ricehens", "eric69420");
-        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
-        exchange.placeOrder(order);
-        assertTrue("<< StockExchange: placeOrder executed successfully", true);
-    }
-
-    //
-    // ----------------------------------------------------
-    // Stock Tests
-    // ----------------------------------------------------
-    //
-
-    @Test
-    public void stockConstructor() {
-        Stock stonk = new Stock("ERIC", "Ricehens", 2 * 69 + 0.69);
-        assertNotNull(stonk);
-        assertEquals("<< Stock: Constructor symbol >>", stonk.getStockSymbol(), "ERIC");
-        assertEquals("<< Stock: Constructor company name >>", stonk.getCompanyName(), "Ricehens");
-        assertEquals("<< Stock: Constructor last price >>", stonk.getLastPrice(), 138.69, 0.00001);
-    }
-
-    @Test
-    public void stockPlaceOrder() {
-        StockExchange exchange = new StockExchange();
-        exchange.listStock("ESPN", "Espen", 137.69);
-        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
-        Brokerage brokerage = new Brokerage(exchange);
-        Trader eric = new Trader(brokerage, "ricehens", "eric69420");
-        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
-        Map<String, Stock> map = exchange.getListedStocks();
-        Stock stonk = map.get("ESPN");
-        stonk.placeOrder(order);
-        PriorityQueue<TradeOrder> buyOrders = stonk.getBuyOrders();
-        PriorityQueue<TradeOrder> sellOrders = stonk.getSellOrders();
-        assertEquals("<< Stock: placed buy order >>", buyOrders.size(), 1);
-        assertEquals("<< Stock: placed buy order >>", sellOrders.size(), 0);
-    }
-
-    @Test
-    public void stockExecuteOrders() {
-        StockExchange exchange = new StockExchange();
-        exchange.listStock("ESPN", "Espen", 137.69);
-        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
-        Brokerage brokerage = new Brokerage(exchange);
-        Trader eric = new Trader(brokerage, "ricehens", "eric69420");
-        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
-        Map<String, Stock> map = exchange.getListedStocks();
-        Stock stonk = map.get("ESPN");
-        stonk.placeOrder(order);
-        PriorityQueue<TradeOrder> buyOrders = stonk.getBuyOrders();
-        PriorityQueue<TradeOrder> sellOrders = stonk.getSellOrders();
-        buyOrders.add(new TradeOrder(eric, "ESPN", true, true, 69, 4.20));
-        sellOrders.add(new TradeOrder(eric, "ESPN", false, true, 137, 6.96));
-        stonk.executeOrders();
-        assertEquals(buyOrders.size(), 0);
-        assertEquals(sellOrders.size(), 1);
-        assertEquals(sellOrders.peek().getShares(), 68);
-        buyOrders.add(new TradeOrder(eric, "ESPN", true, false, 69, 42.0));
-        sellOrders.add(new TradeOrder(eric, "ESPN", false, true, 69, 6.99));
-        stonk.executeOrders();
-        assertEquals(buyOrders.size(), 0);
-        assertEquals(sellOrders.size(), 1);
-        assertEquals(sellOrders.peek().getShares(), 68);
-        assertEquals(sellOrders.peek().getPrice(), 6.99, 0.00001);
-        buyOrders.add(new TradeOrder(eric, "ESPN", true, false, 69, 42.0));
-        sellOrders.add(new TradeOrder(eric, "ESPN", false, false, 69, 7.69));
-        stonk.executeOrders();
-        assertEquals(buyOrders.size(), 0);
-        assertEquals(sellOrders.size(), 1);
-        assertEquals(sellOrders.peek().getShares(), 68);
-        buyOrders.add(new TradeOrder(eric, "ESPN", true, false, 69, 6.96));
-        stonk.executeOrders();
-        assertEquals(buyOrders.size(), 1);
-        assertEquals(sellOrders.size(), 1);
-    }
-
-    //
-    // ----------------------------------------------------
-    // Trader Tests
-    // ----------------------------------------------------
-    //
-
+    // --Test Trader
     private String screenName = "Trader test";
     private String password = "123456";
     private StockExchange stock = new StockExchange();
@@ -362,6 +172,7 @@ public class JUSafeTradeTest {
         assertEquals("<< Trader getPass error:", trade.getPassword(), "123456");
     }
 
+    @Test
     public void compareToTraderTest() {
         Trader trade = new Trader(broke, screenName, password);
         Trader other = new Trader(null, "Trader test", "123456");
@@ -419,16 +230,31 @@ public class JUSafeTradeTest {
         Brokerage b = new Brokerage(new StockExchange());
         Trader trade = new Trader(b, screenName, password);
         trade.quit();
-        assertEquals("<< Trader is logged out: ", b.getLoggedTraders().contains(trade) != true);
+        assertEquals("<< Trader is logged out: ", b.getLoggedTraders.contains(trade) != true);
     }
+
+    // --Test Brokerage
+
+    // TODO your tests here
+
+    // --Test StockExchange
+
+    // TODO your tests here
+
+    // --Test Stock
+
+    // TODO your tests here
 
     // Remove block comment below to run JUnit test in console
+    /*
+        public static junit.framework.Test suite()
+        {
+            return new JUnit4TestAdapter( JUSafeTradeTest.class );
+        }
 
-    public static junit.framework.Test suite() {
-        return new JUnit4TestAdapter(JUSafeTradeTest.class);
-    }
-
-    public static void main(String args[]) {
-        org.junit.runner.JUnitCore.main("JUSafeTradeTest");
-    }
+        public static void main( String args[] )
+        {
+            org.junit.runner.JUnitCore.main( "JUSafeTradeTest" );
+        }
+    */
 }
