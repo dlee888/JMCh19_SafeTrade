@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
+import static org.junit.Assume.*;
 
+import java.awt.*;
 import java.beans.Transient;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -142,13 +144,15 @@ public class JUSafeTradeTest {
 
     @Test
     public void traderWindowConstructor() {
-        TraderWindow tw = new TraderWindow(null);
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
+        TraderWindow tw = new TraderWindow(new Trader(new Brokerage(new StockExchange()), "test", "test"));
         assertNotNull(tw);
     }
 
     @Test
     public void traderWindowShowMessage() {
-        TraderWindow tw = new TraderWindow(null);
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
+        TraderWindow tw = new TraderWindow(new Trader(new Brokerage(new StockExchange()), "test", "test"));
         assertNotNull(tw);
         tw.showMessage(null);
     }
@@ -195,6 +199,7 @@ public class JUSafeTradeTest {
 
     @Test
     public void brokerageLogin() {
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         StockExchange exchange = new StockExchange();
         Brokerage myBrokerage = new Brokerage(exchange);
 
@@ -377,10 +382,8 @@ public class JUSafeTradeTest {
         exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
         Brokerage brokerage = new Brokerage(exchange);
         Trader eric = new Trader(brokerage, "ricehens", "eric69420");
-        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
         Map<String, Stock> map = exchange.getListedStocks();
         Stock stonk = map.get("ESPN");
-        stonk.placeOrder(order);
         PriorityQueue<TradeOrder> buyOrders = stonk.getBuyOrders();
         PriorityQueue<TradeOrder> sellOrders = stonk.getSellOrders();
         buyOrders.add(new TradeOrder(eric, "ESPN", true, true, 69, 4.20));
@@ -462,6 +465,7 @@ public class JUSafeTradeTest {
 
     @Test
     public void openWindowTraderTest() {
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         Trader trade = new Trader(broke, screenName, password);
         trade.openWindow();
         assertTrue("<< Trader has no messages", !trade.hasMessages());
@@ -476,6 +480,7 @@ public class JUSafeTradeTest {
 
     @Test
     public void getQuoteTraderTest() {
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         Trader trade = new Trader(new Brokerage(new StockExchange()), screenName, password);
         trade.getQuote(symbol);
         assertTrue("<< Trader getQuote: ", trade.hasMessages());
@@ -490,6 +495,12 @@ public class JUSafeTradeTest {
         TradeOrder tradeOrder = new TradeOrder(trade, symbol, buyOrder, marketOrder, numShares, price);
         trade.placeOrder(tradeOrder);
         assertTrue("<< Trader has messages, should be true: ", trade.hasMessages());
+        StockExchange exchange = new StockExchange();
+        exchange.listStock(symbol, screenName, price);
+        Trader trader2 = new Trader(new Brokerage(exchange), screenName, password);
+        TradeOrder tradeOrder2 = new TradeOrder(trader2, symbol, buyOrder, marketOrder, numShares, price);
+        trader2.placeOrder(tradeOrder2);
+        assertTrue("<< Trader has messages, should be true: ", trader2.hasMessages());
     }
 
     @Test
