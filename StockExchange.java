@@ -7,6 +7,8 @@ import java.util.*;
  * list a new stock, request a quote for a given stock symbol, and to place a
  * specified trade order.
  *
+ * @version 69
+ * 
  * @author David
  */
 public class StockExchange {
@@ -105,13 +107,5 @@ public class StockExchange {
         }
 
         return str + "]";
-    }
-
-    public static void main(String[] args)
-    {
-        StockExchange exchange = new StockExchange();
-        exchange.listStock("ESPN", "Espen", 137.69);
-        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
-        System.out.println(exchange);
     }
 }

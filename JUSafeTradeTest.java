@@ -1,13 +1,8 @@
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 
-import java.awt.*;
-import java.beans.Transient;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Set;
-import java.util.regex.*;
 import junit.framework.JUnit4TestAdapter;
 import org.junit.*;
 
@@ -20,13 +15,13 @@ import org.junit.*;
  *   StockExchange
  *   Stock
  *
- * @author TODO Name of principal author
- * @author TODO Name of group member
- * @author TODO Name of group member
+ * @author David Lee
+ * @author Julian McCartney
+ * @author Yvonne Wu
  * @version 3/31/2023
  * @author Assignment: JM Chapter 19 - SafeTrade
  *
- * @author Sources: TODO sources
+ * @author Sources: None
  *
  */
 public class JUSafeTradeTest {
@@ -228,7 +223,6 @@ public class JUSafeTradeTest {
 
     @Test public void brokerageLogin()
     {
-        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         StockExchange exchange = new StockExchange();
         Brokerage myBrokerage = new Brokerage(exchange);
 
@@ -296,6 +290,14 @@ public class JUSafeTradeTest {
         TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
         brokerage.placeOrder(order);
         assertTrue("<< StockExchange: placeOrder executed successfully", true);
+    }
+
+    @Test public void brokerageToString()
+    {
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage(exchange);
+        assertNotNull("<< Brokerage: 0\n<< StockExchange: 0",
+                      brokerage.toString());
     }
 
     //
@@ -380,6 +382,11 @@ public class JUSafeTradeTest {
         assertTrue("<< StockExchange: placeOrder executed successfully", true);
     }
 
+	@Test public void stockExchangeToString() {
+		StockExchange exchange = new StockExchange();
+		assertNotNull("<< StockExchange: 0", exchange.toString());
+	}
+
     //
     // ----------------------------------------------------
     // Stock Tests
@@ -450,6 +457,13 @@ public class JUSafeTradeTest {
         assertEquals(buyOrders.size(), 1);
         assertEquals(sellOrders.size(), 1);
     }
+
+	@Test
+	public void stockToString() {
+		Stock stonk = new Stock("ERIC", "Ricehens", 2 * 69 + 0.69);
+		String str = stonk.toString();
+		assertNotNull(str);
+	}
 
     //
     // ----------------------------------------------------
@@ -526,7 +540,6 @@ public class JUSafeTradeTest {
 
     @Test public void getQuoteTraderTest()
     {
-        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         Trader trade = new Trader(new Brokerage(new StockExchange()),
                                   screenName, password);
         trade.getQuote(symbol);

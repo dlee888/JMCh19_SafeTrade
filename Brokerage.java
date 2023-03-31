@@ -4,6 +4,8 @@ import java.util.*;
 /**
  * Represents a brokerage.
  *
+ * @version 3/31/2023
+ *
  * @author Julian
  */
 public class Brokerage implements Login {
@@ -11,6 +13,10 @@ public class Brokerage implements Login {
     private Set<Trader> loggedTraders;
     private StockExchange exchange;
 
+    /**
+     * Create a brokerage
+     * @param exchange The exchange
+     */
     public Brokerage(StockExchange exchange)
     {
         this.exchange = exchange;
@@ -21,16 +27,28 @@ public class Brokerage implements Login {
     //
     // The following are for test purposes only
     //
+	/**
+	 * Test method
+	 * @return traders
+	 */
     protected Map<String, Trader> getTraders()
     {
         return traders;
     }
 
+	/**
+	 * Test method
+	 * @return loggedTraders
+	 */
     protected Set<Trader> getLoggedTraders()
     {
         return loggedTraders;
     }
 
+	/**
+	 * Test method
+	 * @return exchange
+	 */
     protected StockExchange getExchange()
     {
         return exchange;

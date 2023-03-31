@@ -3,11 +3,15 @@ import java.util.*;
 
 /**
  * Represents a stock trader.
+ *
+ * @version 420
+ *
  * @author Yvonne
  */
 public class Trader implements Comparable<Trader> {
     private Brokerage brokerage;
-    private String screenName, password;
+    private String screenName;
+    private String password;
     private TraderWindow myWindow;
     private Queue<String> mailbox;
 
@@ -71,6 +75,9 @@ public class Trader implements Comparable<Trader> {
 
     /**
      * Compare name to eachother but ignore case
+     *
+     * @param other the other trader to compare to
+     *
      * @return
      *         -1 if less than, 0, if equal, 1 if greater than
      */
@@ -87,9 +94,9 @@ public class Trader implements Comparable<Trader> {
      * @return
      *        Returns true if names are equal, false otherwise
      */
-    public boolean equals(Trader other) //
+    public boolean equals(Object other) //
     {
-        return (screenName.compareToIgnoreCase(other.getName()) == 0);
+        return (screenName.compareToIgnoreCase(((Trader)other).getName()) == 0);
     }
 
     /**
@@ -97,9 +104,9 @@ public class Trader implements Comparable<Trader> {
      */
     public void openWindow()
     {
-        if (java.awt.GraphicsEnvironment.isHeadless()) {
-            return;
-        }
+        // if (java.awt.GraphicsEnvironment.isHeadless()) {
+        //     return;
+        // }
         myWindow = new TraderWindow(this);
         while (mailbox.peek() != null) {
             myWindow.showMessage(mailbox.remove());
