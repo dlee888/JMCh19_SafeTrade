@@ -11,7 +11,6 @@ import java.util.regex.*;
 import junit.framework.JUnit4TestAdapter;
 import org.junit.*;
 
-
 /**
  * SafeTrade tests:
  *   TradeOrder
