@@ -432,4 +432,3 @@ public class JUSafeTradeTest {
         org.junit.runner.JUnitCore.main("JUSafeTradeTest");
     }
 }
-
