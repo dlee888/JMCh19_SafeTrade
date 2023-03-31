@@ -27,28 +27,28 @@ public class Brokerage implements Login {
     //
     // The following are for test purposes only
     //
-	/**
-	 * Test method
-	 * @return traders
-	 */
+    /**
+     * Test method
+     * @return traders
+     */
     protected Map<String, Trader> getTraders()
     {
         return traders;
     }
 
-	/**
-	 * Test method
-	 * @return loggedTraders
-	 */
+    /**
+     * Test method
+     * @return loggedTraders
+     */
     protected Set<Trader> getLoggedTraders()
     {
         return loggedTraders;
     }
 
-	/**
-	 * Test method
-	 * @return exchange
-	 */
+    /**
+     * Test method
+     * @return exchange
+     */
     protected StockExchange getExchange()
     {
         return exchange;

@@ -382,10 +382,11 @@ public class JUSafeTradeTest {
         assertTrue("<< StockExchange: placeOrder executed successfully", true);
     }
 
-	@Test public void stockExchangeToString() {
-		StockExchange exchange = new StockExchange();
-		assertNotNull("<< StockExchange: 0", exchange.toString());
-	}
+    @Test public void stockExchangeToString()
+    {
+        StockExchange exchange = new StockExchange();
+        assertNotNull("<< StockExchange: 0", exchange.toString());
+    }
 
     //
     // ----------------------------------------------------
@@ -458,12 +459,12 @@ public class JUSafeTradeTest {
         assertEquals(sellOrders.size(), 1);
     }
 
-	@Test
-	public void stockToString() {
-		Stock stonk = new Stock("ERIC", "Ricehens", 2 * 69 + 0.69);
-		String str = stonk.toString();
-		assertNotNull(str);
-	}
+    @Test public void stockToString()
+    {
+        Stock stonk = new Stock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        String str = stonk.toString();
+        assertNotNull(str);
+    }
 
     //
     // ----------------------------------------------------

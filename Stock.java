@@ -209,73 +209,73 @@ public class Stock {
     // The following are for test purposes only
     //
 
-	/**
-	 * Getter method for the stock symbol
-	 * @return the stock symbol
-	 */
+    /**
+     * Getter method for the stock symbol
+     * @return the stock symbol
+     */
     protected String getStockSymbol()
     {
         return stockSymbol;
     }
 
-	/**
-	 * Getter method for the company name
-	 * @return the company name
-	 */
+    /**
+     * Getter method for the company name
+     * @return the company name
+     */
     protected String getCompanyName()
     {
         return companyName;
     }
 
-	/**
-	 * Getter method for the loPrice
-	 * @return the loPrice
-	 */
+    /**
+     * Getter method for the loPrice
+     * @return the loPrice
+     */
     protected double getLoPrice()
     {
         return loPrice;
     }
 
-	/**
-	 * Getter method for the hiPrice
-	 * @return the hiPrice
-	 */
+    /**
+     * Getter method for the hiPrice
+     * @return the hiPrice
+     */
     protected double getHiPrice()
     {
         return hiPrice;
     }
 
-	/**
-	 * Getter method for the lastPrice
-	 * @return the lastPrice
-	 */
+    /**
+     * Getter method for the lastPrice
+     * @return the lastPrice
+     */
     protected double getLastPrice()
     {
         return lastPrice;
     }
 
-	/**
-	 * Getter method for the volume
-	 * @return the volume
-	 */
+    /**
+     * Getter method for the volume
+     * @return the volume
+     */
     protected int getVolume()
     {
         return volume;
     }
 
-	/**
-	 * Getter method for the buyOrders
-	 * @return the buyOrders
-	 */
+    /**
+     * Getter method for the buyOrders
+     * @return the buyOrders
+     */
     protected PriorityQueue<TradeOrder> getBuyOrders()
     {
         return buyOrders;
     }
 
-	/**
-	 * Getter method for the sellOrders
-	 * @return the sellOrders
-	 */
+    /**
+     * Getter method for the sellOrders
+     * @return the sellOrders
+     */
     protected PriorityQueue<TradeOrder> getSellOrders()
     {
         return sellOrders;

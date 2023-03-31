@@ -8,7 +8,7 @@ import java.util.*;
  * specified trade order.
  *
  * @version 69
- * 
+ *
  * @author David
  */
 public class StockExchange {

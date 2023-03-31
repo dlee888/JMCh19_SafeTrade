@@ -13,16 +13,15 @@ public class TradeOrder {
     private int numShares;
     private double price;
 
-
-	/**
-	 * Constructs a new trade order given a trader, stock symbol, a boolean
-	 * @param trader the trader
-	 * @param symbol the stock symbol
-	 * @param buyOrder true if a buy order; false otherwise
-	 * @param marketOrder true if a market order; false otherwise
-	 * @param numShares the number of shares
-	 * @param price the price per share
-	 */
+    /**
+     * Constructs a new trade order given a trader, stock symbol, a boolean
+     * @param trader the trader
+     * @param symbol the stock symbol
+     * @param buyOrder true if a buy order; false otherwise
+     * @param marketOrder true if a market order; false otherwise
+     * @param numShares the number of shares
+     * @param price the price per share
+     */
     public TradeOrder(Trader trader, java.lang.String symbol, boolean buyOrder,
                       boolean marketOrder, int numShares, double price)
     {
