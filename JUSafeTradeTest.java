@@ -172,7 +172,7 @@ public class JUSafeTradeTest {
         StockExchange exchange = new StockExchange();
         Brokerage myBrokerage = new Brokerage(exchange);
         assertNotNull(myBrokerage);
-        assertEquals(myBrokerage.getExchange(), exchange);
+        assertEquals(exchange, myBrokerage.getExchange());
         assertTrue(myBrokerage.getLoggedTraders().isEmpty());
         assertTrue(myBrokerage.getTraders().isEmpty());
     }
@@ -182,15 +182,15 @@ public class JUSafeTradeTest {
         StockExchange exchange = new StockExchange();
         Brokerage myBrokerage = new Brokerage(exchange);
 
-        assertEquals(myBrokerage.addUser("LoremIpsum", "E"), -2);
-        assertEquals(myBrokerage.addUser("LoremIpsum", "ExtremeSecurity"), -2);
-        assertEquals(myBrokerage.addUser("LoremIpsum", "Secure"), 0);
-        assertEquals(myBrokerage.addUser("Bob", "Secure"), -1);
-        assertEquals(myBrokerage.addUser("Lorem Ipsum", "Secure"), -1);
-        assertEquals(myBrokerage.addUser("LoremIpsum", "secure"), -3);
-        assertEquals(myBrokerage.addUser("1to2", "12"), 0);
-        assertEquals(myBrokerage.addUser("Jerry", "1234567890"), 0);
-        assertEquals(myBrokerage.getTraders().size(), 3);
+        assertEquals(-2, myBrokerage.addUser("LoremIpsum", "E"));
+        assertEquals(-2, myBrokerage.addUser("LoremIpsum", "ExtremeSecurity"));
+        assertEquals(0, myBrokerage.addUser("LoremIpsum", "Secure"));
+        assertEquals(-1, myBrokerage.addUser("Bob", "Secure"));
+        assertEquals(-1, myBrokerage.addUser("Lorem Ipsum", "Secure"));
+        assertEquals(-3, myBrokerage.addUser("LoremIpsum", "secure"));
+        assertEquals(0, myBrokerage.addUser("1to2", "12"));
+        assertEquals(0, myBrokerage.addUser("Jerry", "1234567890"));
+        assertEquals(3, myBrokerage.getTraders().size());
     }
 
     @Test
@@ -201,14 +201,18 @@ public class JUSafeTradeTest {
         myBrokerage.addUser("LoremIpsum", "Secure");
         myBrokerage.addUser("Jerry", "1234567890");
 
-        assertEquals(myBrokerage.login("fndskl", "hfdgs"), -1);
-        assertEquals(myBrokerage.login("fndskl", "Secure"), -1);
-        assertEquals(myBrokerage.login("LoremIpsum", "hfdgs"), -2);
-        assertEquals(myBrokerage.login("LoremIpsum", "Secure"), 0);
-        assertEquals(myBrokerage.login("Jerry", "1234567890"), 0);
-        assertEquals(myBrokerage.login("LoremIpsum", "Secure"), -3);
-        assertEquals(myBrokerage.login("Jerry", "1234567890"), -3);
-        assertEquals(myBrokerage.getLoggedTraders().size(), 2);
+        assertEquals(-1, myBrokerage.login("fndskl", "hfdgs"));
+        assertEquals(-1, myBrokerage.login("fndskl", "Secure"));
+        assertEquals(-2, myBrokerage.login("LoremIpsum", "hfdgs"));
+        assertEquals(0, myBrokerage.getLoggedTraders().size());
+
+        assertEquals(0, myBrokerage.login("LoremIpsum", "Secure"));
+        assertEquals(0, myBrokerage.login("Jerry", "1234567890"));
+        assertEquals(2, myBrokerage.getLoggedTraders().size());
+
+        assertEquals(-3, myBrokerage.login("LoremIpsum", "Secure"));
+        assertEquals(-3, myBrokerage.login("Jerry", "1234567890"));
+        assertEquals(2, myBrokerage.getLoggedTraders().size());
     }
 
     @Test
@@ -219,7 +223,80 @@ public class JUSafeTradeTest {
         myBrokerage.addUser("LoremIpsum", "Secure");
         myBrokerage.addUser("Jerry", "1234567890");
 
-        assertEquals(myBrokerage.getLoggedTraders().size(), 2);
+        myBrokerage.login("LoremIpsum", "Secure");
+        myBrokerage.login("Jerry", "1234567890");
+
+        assertEquals(2, myBrokerage.getLoggedTraders().size());
+
+        Trader trader1 = myBrokerage.getTraders().get("LoremIpsum");
+        Trader trader2 = myBrokerage.getTraders().get("Jerry");
+
+        myBrokerage.logout(trader1);
+        myBrokerage.logout(trader2);
+
+        assertEquals(0, myBrokerage.getLoggedTraders().size());
+
+    }
+
+    @Test
+    public void brokerageGetQuote() {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+
+        Brokerage myBrokerage = new Brokerage(exchange);
+        Trader trader = new Trader(myBrokerage, "Jerry", "1234567890");
+
+        assertFalse(trader.hasMessages());
+        myBrokerage.getQuote("ERIC", trader);
+        assertTrue(trader.hasMessages());
+    }
+
+    @Test
+    public void brokeragePlaceOrder() {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        Brokerage brokerage = new Brokerage(exchange);
+        Trader eric = new Trader(brokerage, "ricehens", "eric69420");
+        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
+        brokerage.placeOrder(order);
+        assertTrue("<< StockExchange: placeOrder executed successfully", true);
+    }
+
+    //
+    // ----------------------------------------------------
+    // PriceComparator Tests
+    // ----------------------------------------------------
+    //
+
+    @Test
+    public void priceComparatorCompare() {
+        StockExchange exchange = new StockExchange();
+        exchange.listStock("ESPN", "Espen", 137.69);
+        exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+        Brokerage brokerage = new Brokerage(exchange);
+        Trader eric = new Trader(brokerage, "ricehens", "eric69420");
+        
+        TradeOrder order1 = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
+        TradeOrder order2 = new TradeOrder(eric, "ESPN", true, true, 69, 7.20);
+        
+        PriceComparator comparator = new PriceComparator();
+        
+        assertEquals(0, comparator.compare(order1, order2));
+        assertEquals(0, comparator.compare(order1, order2));
+
+        TradeOrder order3 = new TradeOrder(eric, "ESPN", true, false, 69, 4.20);
+        assertEquals(-1, comparator.compare(order2, order3));
+        assertEquals(1, comparator.compare(order3, order2));
+
+        TradeOrder order4 = new TradeOrder(eric, "ESPN", true, false, 69, 7.20);
+        assertEquals(-300, comparator.compare(order3, order4));
+        assertEquals(300, comparator.compare(order4, order3));
+
+        PriceComparator comparator2 = new PriceComparator(false);
+        assertEquals(300, comparator2.compare(order3, order4));
+        assertEquals(-300, comparator2.compare(order4, order3));
     }
 
     //
