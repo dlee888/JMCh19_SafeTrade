@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 
+import java.awt.*;
 import java.beans.Transient;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -9,7 +10,6 @@ import java.util.Set;
 import java.util.regex.*;
 import junit.framework.JUnit4TestAdapter;
 import org.junit.*;
-import java.awt.*;
 
 /**
  * SafeTrade tests:
@@ -144,14 +144,14 @@ public class JUSafeTradeTest {
 
     @Test
     public void traderWindowConstructor() {
-		assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         TraderWindow tw = new TraderWindow(new Trader(new Brokerage(new StockExchange()), "test", "test"));
         assertNotNull(tw);
     }
 
     @Test
     public void traderWindowShowMessage() {
-		assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         TraderWindow tw = new TraderWindow(new Trader(new Brokerage(new StockExchange()), "test", "test"));
         assertNotNull(tw);
         tw.showMessage(null);
@@ -199,7 +199,7 @@ public class JUSafeTradeTest {
 
     @Test
     public void brokerageLogin() {
-		assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         StockExchange exchange = new StockExchange();
         Brokerage myBrokerage = new Brokerage(exchange);
 
@@ -388,7 +388,7 @@ public class JUSafeTradeTest {
 
     @Test
     public void openWindowTraderTest() {
-		assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         Trader trade = new Trader(broke, screenName, password);
         trade.openWindow();
         assertTrue("<< Trader has no messages", !trade.hasMessages());
@@ -403,7 +403,7 @@ public class JUSafeTradeTest {
 
     @Test
     public void getQuoteTraderTest() {
-		assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         Trader trade = new Trader(new Brokerage(new StockExchange()), screenName, password);
         trade.getQuote(symbol);
         assertTrue("<< Trader getQuote: ", trade.hasMessages());
