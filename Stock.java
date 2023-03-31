@@ -122,11 +122,8 @@ public class Stock {
             sellOrders.add(order);
         }
         order.getTrader().receiveMessage(String.format(
-            "New order:  %s %s (%s)\n%d shares at %s",
-            order.isBuy() ? "Buy" : "Sell", stockSymbol, companyName,
-            order.getShares(),
-            order.isMarket() ? "market"
-                             : String.format("%.2f", order.getPrice())));
+            "New order:  %s %s (%s)\n%d shares at %s", order.isBuy() ? "Buy" : "Sell", stockSymbol, companyName,
+            order.getShares(), order.isMarket() ? "market" : String.format("%.2f", order.getPrice())));
         executeOrders();
     }
 
