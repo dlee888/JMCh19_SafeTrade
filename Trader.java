@@ -92,6 +92,9 @@ public class Trader implements Comparable<Trader> {
      * Opens the winder
      */
     public void openWindow() {
+        if (java.awt.GraphicsEnvironment.isHeadless()) {
+            return;
+        }
         myWindow = new TraderWindow(this);
         while (mailbox.peek() != null) {
             myWindow.showMessage(mailbox.remove());

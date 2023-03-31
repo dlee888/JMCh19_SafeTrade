@@ -5,16 +5,24 @@ import java.util.*;
 /**
  * Represents a stock in the SafeTrade project
  *
+ * @version 3/31/2023
+ *
  * @author David
  */
 public class Stock {
+    /**
+     * Decimal format for money...
+     */
     public static DecimalFormat money = new DecimalFormat("0.00");
 
     private String stockSymbol;
     private String companyName;
-    private double loPrice, hiPrice, lastPrice;
+    private double loPrice;
+    private double hiPrice;
+    private double lastPrice;
     private int volume;
-    private PriorityQueue<TradeOrder> buyOrders, sellOrders;
+    private PriorityQueue<TradeOrder> buyOrders;
+    private PriorityQueue<TradeOrder> sellOrders;
 
     /**
      * Constructs a new stock with a given symbol, company name,
@@ -22,21 +30,28 @@ public class Stock {
      * and last price to the same opening price.
      * Sets "day" volume to zero.
      * Initializes a priority queue for sell orders
-     * to an empty <code>PriorityQueue</code> with a <code>PriceComparator</code>
-     * configured for comparing orders in ascending order;
-     * initializes a priority queue for buy orders
-     * to an empty <code>PriorityQueue</code> with a <code>PriceComparator</code>
-     * configured for comparing orders in descending order.
+     * to an empty <code>PriorityQueue</code> with a
+     * <code>PriceComparator</code> configured for comparing orders in ascending
+     * order; initializes a priority queue for buy orders to an empty
+     * <code>PriorityQueue</code> with a <code>PriceComparator</code> configured
+     * for comparing orders in descending order.
+     *
+     * @param symbol the stock symbol.
+     * @param name full company name.
+     * @param price the opening price.
      */
-    public Stock(String symbol, String name, double price) {
+    public Stock(String symbol, String name, double price)
+    {
         stockSymbol = symbol;
         companyName = name;
         loPrice = price;
         hiPrice = price;
         lastPrice = price;
         volume = 0;
-        buyOrders = new PriorityQueue<TradeOrder>(11, new PriceComparator(false));
-        sellOrders = new PriorityQueue<TradeOrder>(11, new PriceComparator(true));
+        buyOrders =
+            new PriorityQueue<TradeOrder>(11, new PriceComparator(false));
+        sellOrders =
+            new PriorityQueue<TradeOrder>(11, new PriceComparator(true));
     }
 
     /**
@@ -54,18 +69,28 @@ public class Stock {
      * Giggle.com (GGGL)
      * Price: 12.00  hi: 14.50  lo: 9.00  vol: 500
      * Ask: none  Bid: 12.50 size: 200</pre>
+     * @return the quote for this stock.
      */
-    public String getQuote() {
-        return String.format("%s (%s)\nPrice: %.2f  hi: %.2f  lo: %.2f  vol: %d\nAsk: %s  Bid: %s", companyName,
-                             stockSymbol, lastPrice, hiPrice, loPrice, volume, formatOrder(sellOrders.peek()),
-                             formatOrder(buyOrders.peek()));
+    public String getQuote()
+    {
+        return String.format(
+            "%s (%s)\nPrice: %.2f  hi: %.2f  lo: %.2f  vol: %d\nAsk: %s  Bid: %s",
+            companyName, stockSymbol, lastPrice, hiPrice, loPrice, volume,
+            formatOrder(sellOrders.peek()), formatOrder(buyOrders.peek()));
     }
 
-    private String formatOrder(TradeOrder order) {
+	/**
+	 * Helper method to format an order. Returns "none" if no order
+	 * @param order
+	 * @return a string describing the order.
+	 */
+    private String formatOrder(TradeOrder order)
+    {
         if (order == null) {
             return "none";
         }
-        return String.format("%.2f size: %d", order.getPrice(), order.getShares());
+        return String.format("%.2f size: %d", order.getPrice(),
+                             order.getShares());
     }
 
     /**
@@ -84,17 +109,24 @@ public class Stock {
      * 150 shares at market</pre>
      * Executes pending orders by calling
      * <code>executeOrders</code>.
+	 * 
+	 * @param order the trade order to be placed
      */
-    public void placeOrder(TradeOrder order) {
+    public void placeOrder(TradeOrder order)
+    {
         if (order.isBuy()) {
             buyOrders.add(order);
-        } else {
+        }
+        else {
             assert (order.isSell());
             sellOrders.add(order);
         }
-        order.getTrader().receiveMessage(
-            String.format("New order:  %s %s (%s)\n%d shares at %s", order.isBuy() ? "Buy" : "Sell", stockSymbol, companyName, order.getShares(),
-                          order.isMarket() ? "market" : String.format("%.2f", order.getPrice())));
+        order.getTrader().receiveMessage(String.format(
+            "New order:  %s %s (%s)\n%d shares at %s",
+            order.isBuy() ? "Buy" : "Sell", stockSymbol, companyName,
+            order.getShares(),
+            order.isMarket() ? "market"
+                             : String.format("%.2f", order.getPrice())));
         executeOrders();
     }
 
@@ -104,51 +136,53 @@ public class Stock {
      *   <li> Examines the top sell order and the top buy order in
      *      the respective priority queues.</li>
      * <ol type="i">
-     *      <li>If both are limit orders and the buy order price is greater or equal
-     *      to the sell order price, executes the order (or a part of it)
-     *      at the sell order price.</li>
-     *      <li>If one order is limit and the other is market, executes the
-     *      order (or a part of it) at the limit order price</li>
-     *      <li>If both orders are market, executes the order (or a part of it)
-     *      at the last sale price.</li>
+     *      <li>If both are limit orders and the buy order price is greater or
+     * equal to the sell order price, executes the order (or a part of it) at
+     * the sell order price.</li> <li>If one order is limit and the other is
+     * market, executes the order (or a part of it) at the limit order
+     * price</li> <li>If both orders are market, executes the order (or a part
+     * of it) at the last sale price.</li>
      * </ol>
      *   <li> Figures out how many shares can be traded, which
      *      is the smallest of the numbers of shares in the two orders.</li>
      *   <li> Subtracts the traded number of shares from each order;
-     *      Removes each of the orders with 0 remaining shares from the respective queue.</li>
-     *   <li> Updates the day's low price, high price, and volume.</li>
-     *   <li> Sends a message to each of the two traders involved in the transaction.
-     *      For example:
-     *      <pre>
-     *      You bought: 150 GGGL at 38.00 amt 5700.00</pre>
+     *      Removes each of the orders with 0 remaining shares from the
+     * respective queue.</li> <li> Updates the day's low price, high price, and
+     * volume.</li> <li> Sends a message to each of the two traders involved in
+     * the transaction. For example: <pre> You bought: 150 GGGL at 38.00 amt
+     * 5700.00</pre>
      *
-     *   <b>Note:</b> The dollar amounts should be formatted to two decimal places (eg. 12.40, not 12.4)<br>
-     *   <br>
-     *   <li> Repeats steps 1-5 for as long as possible, that is as long as
-     *      there is any movement in the buy / sell order queues.
-     *      (The process gets stuck when the top buy order and sell order
-     *      are both limit orders and the ask price is higher than the bid
+     *   <b>Note:</b> The dollar amounts should be formatted to two decimal
+     * places (eg. 12.40, not 12.4)<br> <br> <li> Repeats steps 1-5 for as long
+     * as possible, that is as long as there is any movement in the buy / sell
+     * order queues. (The process gets stuck when the top buy order and sell
+     * order are both limit orders and the ask price is higher than the bid
      *      price.)</li>
      * </ol>
      */
-    public void executeOrders() {
+    public void executeOrders()
+    {
         TradeOrder buyOrder = buyOrders.peek();
         TradeOrder sellOrder = sellOrders.peek();
         if (buyOrder == null || sellOrder == null) {
             return;
         }
-        int sharesTraded = Math.min(buyOrder.getShares(), sellOrder.getShares());
+        int sharesTraded =
+            Math.min(buyOrder.getShares(), sellOrder.getShares());
         double price = 0;
         if (buyOrder.isLimit() && sellOrder.isLimit()) {
             price = sellOrder.getPrice();
             if (buyOrder.getPrice() < price) {
                 return;
             }
-        } else if (buyOrder.isLimit() && sellOrder.isMarket()) {
+        }
+        else if (buyOrder.isLimit() && sellOrder.isMarket()) {
             price = buyOrder.getPrice();
-        } else if (buyOrder.isMarket() && sellOrder.isLimit()) {
+        }
+        else if (buyOrder.isMarket() && sellOrder.isLimit()) {
             price = sellOrder.getPrice();
-        } else {
+        }
+        else {
             price = lastPrice;
         }
         buyOrder.subtractShares(sharesTraded);
@@ -162,10 +196,12 @@ public class Stock {
         hiPrice = Math.max(hiPrice, price);
         loPrice = Math.min(loPrice, price);
         volume += sharesTraded;
-        buyOrder.getTrader().receiveMessage(String.format("You bought: %d %s at %.2f amt %.2f", sharesTraded,
-                                                          stockSymbol, price, sharesTraded * price));
+        buyOrder.getTrader().receiveMessage(
+            String.format("You bought: %d %s at %.2f amt %.2f", sharesTraded,
+                          stockSymbol, price, sharesTraded * price));
         sellOrder.getTrader().receiveMessage(
-            String.format("You sold: %d %s at %.2f amt %.2f", sharesTraded, stockSymbol, price, sharesTraded * price));
+            String.format("You sold: %d %s at %.2f amt %.2f", sharesTraded,
+                          stockSymbol, price, sharesTraded * price));
         executeOrders();
     }
 
@@ -173,35 +209,43 @@ public class Stock {
     // The following are for test purposes only
     //
 
-    protected String getStockSymbol() {
+    protected String getStockSymbol()
+    {
         return stockSymbol;
     }
 
-    protected String getCompanyName() {
+    protected String getCompanyName()
+    {
         return companyName;
     }
 
-    protected double getLoPrice() {
+    protected double getLoPrice()
+    {
         return loPrice;
     }
 
-    protected double getHiPrice() {
+    protected double getHiPrice()
+    {
         return hiPrice;
     }
 
-    protected double getLastPrice() {
+    protected double getLastPrice()
+    {
         return lastPrice;
     }
 
-    protected int getVolume() {
+    protected int getVolume()
+    {
         return volume;
     }
 
-    protected PriorityQueue<TradeOrder> getBuyOrders() {
+    protected PriorityQueue<TradeOrder> getBuyOrders()
+    {
         return buyOrders;
     }
 
-    protected PriorityQueue<TradeOrder> getSellOrders() {
+    protected PriorityQueue<TradeOrder> getSellOrders()
+    {
         return sellOrders;
     }
 
@@ -214,7 +258,8 @@ public class Stock {
      *
      * @return a string representation of this Stock.
      */
-    public String toString() {
+    public String toString()
+    {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
@@ -222,8 +267,10 @@ public class Stock {
 
         for (Field field : fields) {
             try {
-                str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
-            } catch (IllegalAccessException ex) {
+                str += separator + field.getType().getName() + " " +
+                       field.getName() + ":" + field.get(this);
+            }
+            catch (IllegalAccessException ex) {
                 System.out.println(ex);
             }
 

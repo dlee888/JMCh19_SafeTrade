@@ -325,6 +325,7 @@ public class JUSafeTradeTest {
         StockExchange exchange = new StockExchange();
         exchange.listStock("ESPN", "Espen", 137.69);
         exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
+		exchange.placeOrder(new TradeOrder(new Trader(new Brokerage(exchange), screenName, password), symbol, buyOrder, marketOrder, numShares, price));
         String quote1 = exchange.getQuote("ERIC");
         String quote2 = exchange.getQuote("RICE");
         assertTrue("<< StockExchange: get quote in listing >>", quote1 != null && quote1.contains("ERIC"));
