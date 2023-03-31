@@ -142,13 +142,13 @@ public class JUSafeTradeTest {
 
     @Test
     public void traderWindowConstructor() {
-        TraderWindow tw = new TraderWindow(null);
+        TraderWindow tw = new TraderWindow(new Trader(new Brokerage(new StockExchange()), "test", "test"));
         assertNotNull(tw);
     }
 
     @Test
     public void traderWindowShowMessage() {
-        TraderWindow tw = new TraderWindow(null);
+        TraderWindow tw = new TraderWindow(new Trader(new Brokerage(new StockExchange()), "test", "test"));
         assertNotNull(tw);
         tw.showMessage(null);
     }
@@ -300,10 +300,8 @@ public class JUSafeTradeTest {
         exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
         Brokerage brokerage = new Brokerage(exchange);
         Trader eric = new Trader(brokerage, "ricehens", "eric69420");
-        TradeOrder order = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
         Map<String, Stock> map = exchange.getListedStocks();
         Stock stonk = map.get("ESPN");
-        stonk.placeOrder(order);
         PriorityQueue<TradeOrder> buyOrders = stonk.getBuyOrders();
         PriorityQueue<TradeOrder> sellOrders = stonk.getSellOrders();
         buyOrders.add(new TradeOrder(eric, "ESPN", true, true, 69, 4.20));

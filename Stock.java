@@ -92,6 +92,9 @@ public class Stock {
             assert (order.isSell());
             sellOrders.add(order);
         }
+        order.getTrader().receiveMessage(
+            String.format("New order:  Buy %s (%s)\n%d shares at %s", stockSymbol, companyName, order.getShares(),
+                          order.isMarket() ? "market" : String.format("%.2f", order.getPrice())));
         executeOrders();
     }
 
@@ -138,7 +141,7 @@ public class Stock {
         double price = 0;
         if (buyOrder.isLimit() && sellOrder.isLimit()) {
             price = sellOrder.getPrice();
-            if (buyOrder.getPrice() > price) {
+            if (buyOrder.getPrice() < price) {
                 return;
             }
         } else if (buyOrder.isLimit() && sellOrder.isMarket()) {
