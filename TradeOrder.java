@@ -5,7 +5,8 @@ import java.lang.reflect.*;
  * specified stock.
  * @author Yvonne
  */
-public class TradeOrder {
+public class TradeOrder
+{
     private Trader trader;
     private String symbol;
     private boolean buyOrder;
@@ -13,8 +14,8 @@ public class TradeOrder {
     private int numShares;
     private double price;
 
-    public TradeOrder(Trader trader, java.lang.String symbol, boolean buyOrder, boolean marketOrder, int numShares,
-                      double price) {
+    public TradeOrder(Trader trader, java.lang.String symbol, boolean buyOrder, boolean marketOrder, int numShares, double price)
+    {
         this.trader = trader;
         this.symbol = symbol;
         this.buyOrder = buyOrder;
@@ -25,10 +26,11 @@ public class TradeOrder {
 
     /**
      * This will get the trader
-     * @return
+     * @return 
      *        return the trader
      */
-    public Trader getTrader() {
+    public Trader getTrader()
+    {
         return trader;
     }
 
@@ -37,28 +39,36 @@ public class TradeOrder {
      * @return
      *         the symbol
      */
-    public String getSymbol() {
+    public String getSymbol()
+    {
         return symbol;
     }
-    public boolean isBuy() {
+    public boolean isBuy()
+    {
         return buyOrder;
     }
-    public boolean isSell() {
+    public boolean isSell()
+    {
         return !buyOrder;
     }
-    public boolean isMarket() {
+    public boolean isMarket()
+    {
         return marketOrder;
     }
-    public boolean isLimit() {
+    public boolean isLimit()
+    {
         return !marketOrder;
     }
-    public int getShares() {
+    public int getShares()
+    {
         return numShares;
     }
-    public double getPrice() {
+    public double getPrice()
+    {
         return price;
     }
-    public void subtractShares(int shares) {
+    public void subtractShares(int shares)
+    {
         numShares -= shares;
     }
 
@@ -71,20 +81,26 @@ public class TradeOrder {
      * values of all fields <em>declared in this class</em>. Note that
      * superclass fields are left out of this implementation.
      * </p>
-     *
+     * 
      * @return a string representation of this TradeOrder.
      */
-    public String toString() {
+    public String toString()
+    {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
         Field[] fields = this.getClass().getDeclaredFields();
 
-        for (Field field : fields) {
-            try {
-                str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
-            } catch (IllegalAccessException ex) {
-                System.out.println(ex);
+        for ( Field field : fields )
+        {
+            try
+            {
+                str += separator + field.getType().getName() + " "
+                    + field.getName() + ":" + field.get( this );
+            }
+            catch ( IllegalAccessException ex )
+            {
+                System.out.println( ex );
             }
 
             separator = ", ";
