@@ -40,24 +40,66 @@ public class TradeOrder {
     public String getSymbol() {
         return symbol;
     }
+
+    /**
+     * Returns value of buyOrder
+     * @return
+     *      buyOrder
+     */
     public boolean isBuy() {
         return buyOrder;
     }
+
+    /**
+     * Returns opposite of buyOrder value
+     * @return 
+     *         the opposite of buyOrder
+     */
     public boolean isSell() {
         return !buyOrder;
     }
+
+    /**
+     * Returns marketOrder value
+     * @return
+     *         marketOrder
+     */
     public boolean isMarket() {
         return marketOrder;
     }
+
+    /**
+     * Returns the opposite of marketOrder value
+     * @return
+     *      opposite of marketOrder
+     */
     public boolean isLimit() {
         return !marketOrder;
     }
+
+    /**
+     * Returns the numShares
+     * @return
+     *      numShares
+     */
     public int getShares() {
         return numShares;
     }
+
+    /**
+     * Gets the price
+     * @return
+     *      price
+     */
     public double getPrice() {
         return price;
     }
+
+    /**
+     * Calculates the subtracted shares
+     * @param shares
+     *          the amount of shares you want to subtract
+     */
     public void subtractShares(int shares) {
         numShares -= shares;
     }
