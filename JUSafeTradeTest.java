@@ -222,6 +222,7 @@ public class JUSafeTradeTest {
 
     @Test
     public void brokerageLogout() {
+        assumeFalse(java.awt.GraphicsEnvironment.isHeadless());
         StockExchange exchange = new StockExchange();
         Brokerage myBrokerage = new Brokerage(exchange);
 
