@@ -240,7 +240,6 @@ public class JUSafeTradeTest {
         myBrokerage.logout(trader2);
 
         assertEquals(0, myBrokerage.getLoggedTraders().size());
-
     }
 
     @Test
@@ -282,12 +281,12 @@ public class JUSafeTradeTest {
         exchange.listStock("ERIC", "Ricehens", 2 * 69 + 0.69);
         Brokerage brokerage = new Brokerage(exchange);
         Trader eric = new Trader(brokerage, "ricehens", "eric69420");
-        
+
         TradeOrder order1 = new TradeOrder(eric, "ESPN", true, true, 69, 4.20);
         TradeOrder order2 = new TradeOrder(eric, "ESPN", true, true, 69, 7.20);
-        
+
         PriceComparator comparator = new PriceComparator();
-        
+
         assertEquals(0, comparator.compare(order1, order2));
         assertEquals(0, comparator.compare(order1, order2));
 
