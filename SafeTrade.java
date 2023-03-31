@@ -4,7 +4,8 @@ import javax.swing.*;
  * The main class for the <i>SafeTrade</i> application.
  */
 public class SafeTrade {
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         StockExchange exchange = new StockExchange();
         exchange.listStock("DS", "DanceStudios.com", 12.33);
         exchange.listStock("NSTL", "Nasty Loops Inc.", 0.25);

@@ -11,7 +11,8 @@ public class Brokerage implements Login {
     private Set<Trader> loggedTraders;
     private StockExchange exchange;
 
-    public Brokerage(StockExchange exchange) {
+    public Brokerage(StockExchange exchange)
+    {
         this.exchange = exchange;
         loggedTraders = new HashSet<Trader>();
         traders = new HashMap<String, Trader>();
@@ -20,15 +21,18 @@ public class Brokerage implements Login {
     //
     // The following are for test purposes only
     //
-    protected Map<String, Trader> getTraders() {
+    protected Map<String, Trader> getTraders()
+    {
         return traders;
     }
 
-    protected Set<Trader> getLoggedTraders() {
+    protected Set<Trader> getLoggedTraders()
+    {
         return loggedTraders;
     }
 
-    protected StockExchange getExchange() {
+    protected StockExchange getExchange()
+    {
         return exchange;
     }
 
@@ -47,7 +51,8 @@ public class Brokerage implements Login {
      *         -2 -- invalid password (must be 2-10 chars) <br>
      *         -3 -- the screen name is already taken.
      */
-    public int addUser(String name, String password) {
+    public int addUser(String name, String password)
+    {
         if (name.length() < 4 || name.length() > 10) {
             return -1;
         }
@@ -80,7 +85,8 @@ public class Brokerage implements Login {
      *         -2 -- invalid password <br>
      *         -3 -- user is already logged in.
      */
-    public int login(String name, String password) {
+    public int login(String name, String password)
+    {
         if (!traders.containsKey(name)) {
             return -1;
         }
@@ -112,7 +118,8 @@ public class Brokerage implements Login {
      * @param trader
      *            the trader that logs out.
      */
-    public void logout(Trader trader) {
+    public void logout(Trader trader)
+    {
         loggedTraders.remove(trader);
     }
 
@@ -125,7 +132,8 @@ public class Brokerage implements Login {
      * @param trader
      *            the trader who requested a quote.
      */
-    public void getQuote(String symbol, Trader trader) {
+    public void getQuote(String symbol, Trader trader)
+    {
         trader.receiveMessage(exchange.getQuote(symbol));
     }
 
@@ -135,7 +143,8 @@ public class Brokerage implements Login {
      * @param order
      *            an order to be placed at the stock exchange.
      */
-    public void placeOrder(TradeOrder order) {
+    public void placeOrder(TradeOrder order)
+    {
         exchange.placeOrder(order);
     }
 
@@ -148,7 +157,8 @@ public class Brokerage implements Login {
      *
      * @return a string representation of this Brokerage.
      */
-    public String toString() {
+    public String toString()
+    {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
@@ -156,8 +166,10 @@ public class Brokerage implements Login {
 
         for (Field field : fields) {
             try {
-                str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
-            } catch (IllegalAccessException ex) {
+                str += separator + field.getType().getName() + " " +
+                       field.getName() + ":" + field.get(this);
+            }
+            catch (IllegalAccessException ex) {
                 System.out.println(ex);
             }
 

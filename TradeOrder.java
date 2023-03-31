@@ -13,8 +13,9 @@ public class TradeOrder {
     private int numShares;
     private double price;
 
-    public TradeOrder(Trader trader, java.lang.String symbol, boolean buyOrder, boolean marketOrder, int numShares,
-                      double price) {
+    public TradeOrder(Trader trader, java.lang.String symbol, boolean buyOrder,
+                      boolean marketOrder, int numShares, double price)
+    {
         this.trader = trader;
         this.symbol = symbol;
         this.buyOrder = buyOrder;
@@ -28,7 +29,8 @@ public class TradeOrder {
      * @return
      *        return the trader
      */
-    public Trader getTrader() {
+    public Trader getTrader()
+    {
         return trader;
     }
 
@@ -37,7 +39,8 @@ public class TradeOrder {
      * @return
      *         the symbol
      */
-    public String getSymbol() {
+    public String getSymbol()
+    {
         return symbol;
     }
 
@@ -46,7 +49,8 @@ public class TradeOrder {
      * @return
      *      buyOrder
      */
-    public boolean isBuy() {
+    public boolean isBuy()
+    {
         return buyOrder;
     }
 
@@ -55,7 +59,8 @@ public class TradeOrder {
      * @return
      *         the opposite of buyOrder
      */
-    public boolean isSell() {
+    public boolean isSell()
+    {
         return !buyOrder;
     }
 
@@ -64,7 +69,8 @@ public class TradeOrder {
      * @return
      *         marketOrder
      */
-    public boolean isMarket() {
+    public boolean isMarket()
+    {
         return marketOrder;
     }
 
@@ -73,7 +79,8 @@ public class TradeOrder {
      * @return
      *      opposite of marketOrder
      */
-    public boolean isLimit() {
+    public boolean isLimit()
+    {
         return !marketOrder;
     }
 
@@ -82,7 +89,8 @@ public class TradeOrder {
      * @return
      *      numShares
      */
-    public int getShares() {
+    public int getShares()
+    {
         return numShares;
     }
 
@@ -91,7 +99,8 @@ public class TradeOrder {
      * @return
      *      price
      */
-    public double getPrice() {
+    public double getPrice()
+    {
         return price;
     }
 
@@ -100,7 +109,8 @@ public class TradeOrder {
      * @param shares
      *          the amount of shares you want to subtract
      */
-    public void subtractShares(int shares) {
+    public void subtractShares(int shares)
+    {
         numShares -= shares;
     }
 
@@ -116,7 +126,8 @@ public class TradeOrder {
      *
      * @return a string representation of this TradeOrder.
      */
-    public String toString() {
+    public String toString()
+    {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
@@ -124,8 +135,10 @@ public class TradeOrder {
 
         for (Field field : fields) {
             try {
-                str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
-            } catch (IllegalAccessException ex) {
+                str += separator + field.getType().getName() + " " +
+                       field.getName() + ":" + field.get(this);
+            }
+            catch (IllegalAccessException ex) {
                 System.out.println(ex);
             }
 

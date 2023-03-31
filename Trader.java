@@ -20,7 +20,9 @@ public class Trader implements Comparable<Trader> {
      * @param pswd
      *          This is the password given
      */
-    public Trader(Brokerage brokerage, java.lang.String name, java.lang.String pswd) {
+    public Trader(Brokerage brokerage, java.lang.String name,
+                  java.lang.String pswd)
+    {
         this.brokerage = brokerage;
         screenName = name;
         password = pswd;
@@ -52,7 +54,8 @@ public class Trader implements Comparable<Trader> {
      * @param symbol
      *              The requested quote
      */
-    public void getQuote(String symbol) {
+    public void getQuote(String symbol)
+    {
         brokerage.getQuote(symbol, this);
     }
 
@@ -73,7 +76,8 @@ public class Trader implements Comparable<Trader> {
      */
     public int compareTo(Trader other) //
     {
-        return (screenName.toLowerCase()).compareTo((other.getName()).toLowerCase());
+        return (screenName.toLowerCase())
+            .compareTo((other.getName()).toLowerCase());
     }
 
     /**
@@ -91,7 +95,8 @@ public class Trader implements Comparable<Trader> {
     /**
      * Opens the winder
      */
-    public void openWindow() {
+    public void openWindow()
+    {
         if (java.awt.GraphicsEnvironment.isHeadless()) {
             return;
         }
@@ -106,22 +111,26 @@ public class Trader implements Comparable<Trader> {
      * @param order
      *          the order you want to place
      */
-    public void placeOrder(TradeOrder order) {
+    public void placeOrder(TradeOrder order)
+    {
         brokerage.placeOrder(order);
     }
 
     /**
      * Quits from the window
      */
-    public void quit() {
+    public void quit()
+    {
         brokerage.logout(this);
         myWindow = null;
     }
 
     /*
-     * Adds the message to mailbox and also calls show message on each one of them
+     * Adds the message to mailbox and also calls show message on each one of
+     * them
      */
-    public void receiveMessage(java.lang.String msg) {
+    public void receiveMessage(java.lang.String msg)
+    {
         mailbox.add(msg);
         if (myWindow != null) {
             while (!mailbox.isEmpty()) {
@@ -133,7 +142,8 @@ public class Trader implements Comparable<Trader> {
     //
     // The following are for test purposes only
     //
-    protected Queue<String> mailbox() {
+    protected Queue<String> mailbox()
+    {
         return mailbox;
     }
 
@@ -146,7 +156,8 @@ public class Trader implements Comparable<Trader> {
      *
      * @return a string representation of this Trader.
      */
-    public String toString() {
+    public String toString()
+    {
         String str = this.getClass().getName() + "[";
         String separator = "";
 
@@ -155,10 +166,13 @@ public class Trader implements Comparable<Trader> {
         for (Field field : fields) {
             try {
                 if (field.getType().getName().equals("Brokerage"))
-                    str += separator + field.getType().getName() + " " + field.getName();
+                    str += separator + field.getType().getName() + " " +
+                           field.getName();
                 else
-                    str += separator + field.getType().getName() + " " + field.getName() + ":" + field.get(this);
-            } catch (IllegalAccessException ex) {
+                    str += separator + field.getType().getName() + " " +
+                           field.getName() + ":" + field.get(this);
+            }
+            catch (IllegalAccessException ex) {
                 System.out.println(ex);
             }
 

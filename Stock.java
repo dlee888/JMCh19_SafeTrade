@@ -79,11 +79,11 @@ public class Stock {
             formatOrder(sellOrders.peek()), formatOrder(buyOrders.peek()));
     }
 
-	/**
-	 * Helper method to format an order. Returns "none" if no order
-	 * @param order
-	 * @return a string describing the order.
-	 */
+    /**
+     * Helper method to format an order. Returns "none" if no order
+     * @param order
+     * @return a string describing the order.
+     */
     private String formatOrder(TradeOrder order)
     {
         if (order == null) {
@@ -109,8 +109,8 @@ public class Stock {
      * 150 shares at market</pre>
      * Executes pending orders by calling
      * <code>executeOrders</code>.
-	 * 
-	 * @param order the trade order to be placed
+     *
+     * @param order the trade order to be placed
      */
     public void placeOrder(TradeOrder order)
     {
@@ -122,8 +122,11 @@ public class Stock {
             sellOrders.add(order);
         }
         order.getTrader().receiveMessage(String.format(
-            "New order:  %s %s (%s)\n%d shares at %s", order.isBuy() ? "Buy" : "Sell", stockSymbol, companyName,
-            order.getShares(), order.isMarket() ? "market" : String.format("%.2f", order.getPrice())));
+            "New order:  %s %s (%s)\n%d shares at %s",
+            order.isBuy() ? "Buy" : "Sell", stockSymbol, companyName,
+            order.getShares(),
+            order.isMarket() ? "market"
+                             : String.format("%.2f", order.getPrice())));
         executeOrders();
     }
 

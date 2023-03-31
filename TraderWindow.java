@@ -21,11 +21,13 @@ public class TraderWindow extends JFrame implements ActionListener {
      *
      * @param trader a trader that will own this window.
      */
-    public TraderWindow(Trader trader) {
+    public TraderWindow(Trader trader)
+    {
         super(trader.getName());
 
         addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(WindowEvent e)
+            {
                 myTrader.quit();
             }
         });
@@ -181,7 +183,8 @@ public class TraderWindow extends JFrame implements ActionListener {
         msgArea.setEditable(false);
         msgArea.setBorder(new EmptyBorder(5, 10, 5, 10));
         JScrollPane areaScrollPane = new JScrollPane(msgArea);
-        areaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        areaScrollPane.setVerticalScrollBarPolicy(
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         areaScrollPane.setBorder(new EmptyBorder(5, 0, 5, 0));
 
         Box b = Box.createHorizontalBox();
@@ -201,7 +204,8 @@ public class TraderWindow extends JFrame implements ActionListener {
      *
      * @param msg the message to be displayed.
      */
-    public void showMessage(String msg) {
+    public void showMessage(String msg)
+    {
         msgArea.append(msg + "\n\n");
     }
 
@@ -210,16 +214,20 @@ public class TraderWindow extends JFrame implements ActionListener {
      *
      * @param e an event.
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         AbstractButton b = (AbstractButton)e.getSource();
 
         if (b == quoteBtn) {
             getQuote();
-        } else if (b == orderBtn) {
+        }
+        else if (b == orderBtn) {
             placeOrder();
-        } else if (b == marketBtn) {
+        }
+        else if (b == marketBtn) {
             priceText.setText("");
-        } else if (b == limitBtn) {
+        }
+        else if (b == limitBtn) {
             priceText.selectAll();
             priceText.requestFocus();
         }
@@ -230,10 +238,13 @@ public class TraderWindow extends JFrame implements ActionListener {
     // Obtains the stock symbol from this trade window and asks the trader --
     // the owner of this window -- to request a quote for that stock
     // by calling <code>myTrader.getQuote(symbol)</code>.
-    private void getQuote() {
+    private void getQuote()
+    {
         String symbol = symbText.getText().trim().toUpperCase();
         if (symbol.length() == 0) {
-            JOptionPane.showMessageDialog(this, "Missing stock symbol", "Input error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Missing stock symbol",
+                                          "Input error",
+                                          JOptionPane.ERROR_MESSAGE);
             return;
         }
         myTrader.getQuote(symbol);
@@ -243,7 +254,8 @@ public class TraderWindow extends JFrame implements ActionListener {
     // --
     // the owner of this window -- to place this order
     // by calling <code>myTrader.placeOrder(tradeOrder)</code>.
-    private void placeOrder() {
+    private void placeOrder()
+    {
         String errorMsg = null;
         String symbol = symbText.getText().trim().toUpperCase();
 
@@ -266,14 +278,16 @@ public class TraderWindow extends JFrame implements ActionListener {
             errorMsg = "Do not enter price for a Market order";
 
         if (errorMsg != null) {
-            JOptionPane.showMessageDialog(this, errorMsg, "Input error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, errorMsg, "Input error",
+                                          JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         int numShares = 0;
         try {
             numShares = Integer.parseInt(nsStr);
-        } catch (NumberFormatException ex) {
+        }
+        catch (NumberFormatException ex) {
             errorMsg = "Invalid number of shares";
         }
         if (numShares <= 0) errorMsg = "Invalid number of shares";
@@ -282,18 +296,22 @@ public class TraderWindow extends JFrame implements ActionListener {
         if (limitOrder) {
             try {
                 price = Double.parseDouble(priceStr);
-            } catch (NumberFormatException ex) {
+            }
+            catch (NumberFormatException ex) {
                 errorMsg = "Invalid price";
             }
-        } else if (limitOrder && price <= 0.0)
+        }
+        else if (limitOrder && price <= 0.0)
             errorMsg = "Invalid price";
 
         if (errorMsg != null) {
-            JOptionPane.showMessageDialog(this, errorMsg, "Input error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, errorMsg, "Input error",
+                                          JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        TradeOrder tradeOrder = new TradeOrder(myTrader, symbol, buyOrder, marketOrder, numShares, price);
+        TradeOrder tradeOrder = new TradeOrder(myTrader, symbol, buyOrder,
+                                               marketOrder, numShares, price);
         myTrader.placeOrder(tradeOrder);
     }
 }

@@ -19,7 +19,8 @@ public class LoginWindow extends JFrame {
      *  @param server an object that keeps track of all the registered and
      *  logged-in users.
      */
-    public LoginWindow(String title, Login server) {
+    public LoginWindow(String title, Login server)
+    {
         super(title);
         this.server = server;
         thisWindow = this;
@@ -62,15 +63,18 @@ public class LoginWindow extends JFrame {
     /******************************************************************/
 
     private class LoginListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
             String name = nameField.getText().trim().toLowerCase();
-            String password = (new String(passwordField.getPassword())).trim().toLowerCase();
+            String password =
+                (new String(passwordField.getPassword())).trim().toLowerCase();
             tryLogin(name, password);
             nameField.setText("");
             passwordField.setText("");
         }
 
-        private void tryLogin(String name, String password) {
+        private void tryLogin(String name, String password)
+        {
             String errorMsg = "";
             int result = server.login(name, password);
 
@@ -84,7 +88,9 @@ public class LoginWindow extends JFrame {
                 else
                     errorMsg = "Unknown error code";
 
-                JOptionPane.showMessageDialog(thisWindow, errorMsg, "Login failed", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(thisWindow, errorMsg,
+                                              "Login failed",
+                                              JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -94,17 +100,22 @@ public class LoginWindow extends JFrame {
     /******************************************************************/
 
     private class RegistrationListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
             while (!registered())
                 ;
         }
 
-        private boolean registered() {
-            JLabel regNameLabel = new JLabel("Login name (4-10 chars):", JLabel.RIGHT);
+        private boolean registered()
+        {
+            JLabel regNameLabel =
+                new JLabel("Login name (4-10 chars):", JLabel.RIGHT);
             JTextField regNameField = new JTextField(20);
-            JLabel regPasswordLabel = new JLabel("Password (2-10 chars):", JLabel.RIGHT);
+            JLabel regPasswordLabel =
+                new JLabel("Password (2-10 chars):", JLabel.RIGHT);
             JPasswordField regPasswordField = new JPasswordField(20);
-            JLabel regPasswordLabel2 = new JLabel("Confirm password:", JLabel.RIGHT);
+            JLabel regPasswordLabel2 =
+                new JLabel("Confirm password:", JLabel.RIGHT);
             JPasswordField regPasswordField2 = new JPasswordField(20);
 
             JPanel fieldsPanel = new JPanel();
@@ -119,21 +130,27 @@ public class LoginWindow extends JFrame {
 
             final String optionNames[] = {"Register", "Cancel"};
 
-            if (JOptionPane.showOptionDialog(thisWindow, fieldsPanel, "New user registration",
-                                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, optionNames,
-                                             optionNames[0]) != 0)
+            if (JOptionPane.showOptionDialog(
+                    thisWindow, fieldsPanel, "New user registration",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, optionNames, optionNames[0]) != 0)
                 return true; // User pressed "Cancel"
 
             String name = regNameField.getText().trim().toLowerCase();
-            String password = (new String(regPasswordField.getPassword())).trim().toLowerCase();
-            String password2 = (new String(regPasswordField2.getPassword())).trim().toLowerCase();
+            String password = (new String(regPasswordField.getPassword()))
+                                  .trim()
+                                  .toLowerCase();
+            String password2 = (new String(regPasswordField2.getPassword()))
+                                   .trim()
+                                   .toLowerCase();
 
             String errorMsg = "";
             int result = password.compareTo(password2);
 
             if (result != 0) {
                 errorMsg = "Passwords mismatch, re-enter";
-            } else {
+            }
+            else {
                 result = server.addUser(name, password);
                 if (result < 0) {
                     if (result == -1)
@@ -141,19 +158,24 @@ public class LoginWindow extends JFrame {
                     else if (result == -2)
                         errorMsg = "Password must be 2-10 characters long";
                     else if (result == -3)
-                        errorMsg = "Login name already taken, choose another one";
+                        errorMsg =
+                            "Login name already taken, choose another one";
                     else
                         errorMsg = "Unknown error code";
                 }
             }
 
             if (result != 0) {
-                JOptionPane.showMessageDialog(thisWindow, errorMsg, "Registration failed", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(thisWindow, errorMsg,
+                                              "Registration failed",
+                                              JOptionPane.ERROR_MESSAGE);
                 nameField.setText("");
                 passwordField.setText("");
                 return false;
-            } else {
-                JOptionPane.showMessageDialog(thisWindow, "Added " + name, "Registration successful",
+            }
+            else {
+                JOptionPane.showMessageDialog(thisWindow, "Added " + name,
+                                              "Registration successful",
                                               JOptionPane.INFORMATION_MESSAGE);
                 nameField.setText(name);
                 passwordField.setText(password);
