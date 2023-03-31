@@ -372,7 +372,7 @@ public class JUSafeTradeTest {
     public void equalsTraderTest() {
         Trader trade = new Trader(broke, screenName, password);
         Trader other = new Trader(null, "Trader test", "123456");
-        assertEquals("<< Trader equals error:", trade.equals(other) == false);
+        assertTrue("<< Trader equals error:", trade.equals(other));
     }
 
     @Test
@@ -411,6 +411,7 @@ public class JUSafeTradeTest {
     public void placeOrderTraderTest() {
         Trader trade = new Trader(new Brokerage(new StockExchange()), screenName, password);
         TradeOrder tradeOrder = new TradeOrder(trade, symbol, buyOrder, marketOrder, numShares, price);
+        trade.placeOrder(tradeOrder);
         assertTrue("<< Trader has messages, should be true: ", trade.hasMessages());
     }
 
@@ -419,7 +420,7 @@ public class JUSafeTradeTest {
         Brokerage b = new Brokerage(new StockExchange());
         Trader trade = new Trader(b, screenName, password);
         trade.quit();
-        assertEquals("<< Trader is logged out: ", b.getLoggedTraders().contains(trade) != true);
+        assertFalse("<< Trader is logged out: ", b.getLoggedTraders().contains(trade));
     }
 
     // Remove block comment below to run JUnit test in console
